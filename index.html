@@ -1,0 +1,3387 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  
+<!-- TANDERSA PWA CONFIGURATION -->
+
+<meta name="application-name" content="تندرسا">
+<meta name="description" content="مدیریت هوشمند تغذیه و سبک زندگی">
+
+<meta name="theme-color" content="#701C3C">
+
+<link rel="manifest" href="./manifest.json">
+
+<link
+  rel="icon"
+  type="image/png"
+  sizes="192x192"
+  href="./icon-192.png"
+>
+
+<link
+  rel="apple-touch-icon"
+  href="./icon-192.png"
+>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="تندرسا">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+  
+  
+  
+  
+  
+  
+  <title>تندرسا | TANDERSA - مدیریت هوشمند تغذیه و سبک زندگی</title>
+  
+  <script>
+    // جلوگیری از چشمک‌زدن تم هنگام بارگذاری اولیه
+    (function () {
+      try {
+        const savedTheme = localStorage.getItem('tandersa_v1_theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+  <style>
+    :root {
+      --brand-primary: #701C3C;
+      --brand-primary-hover: #58142E;
+      --brand-soft: #F5DDE5;
+      --brand-gold: #D5AD62;
+      --brand-gold-dark: #B68D40;
+      --bg-app: #FFF9F6;
+      --bg-surface: #FFFFFF;
+      --bg-muted: #F9EEF1;
+      --text-main: #23141A;
+      --text-muted: #66525A;
+      --border-color: #EAD7DE;
+      --shadow-sm: 0 2px 8px rgba(112, 28, 60, 0.06);
+      --shadow-md: 0 8px 24px rgba(112, 28, 60, 0.10);
+      --success: #1E7E53;
+      --success-bg: #E6F6EE;
+      --warning: #9C6500;
+      --warning-bg: #FFF5E0;
+      --danger: #B42318;
+      --danger-bg: #FEECEB;
+      --info: #1D4ED8;
+      --info-bg: #EFF6FF;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --focus-ring: 0 0 0 3px rgba(213, 173, 98, 0.55);
+    }
+
+    [data-theme="dark"] {
+      --brand-primary: #C84B7A;
+      --brand-primary-hover: #DF6392;
+      --brand-soft: #361A26;
+      --brand-gold: #E0BA70;
+      --brand-gold-dark: #C89F52;
+      --bg-app: #150E11;
+      --bg-surface: #21161B;
+      --bg-muted: #2B1D23;
+      --text-main: #FAF3F6;
+      --text-muted: #C2AEB6;
+      --border-color: #3D2831;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --success: #4ADE80;
+      --success-bg: #132E22;
+      --warning: #FBBF24;
+      --warning-bg: #33250C;
+      --danger: #F87171;
+      --danger-bg: #381616;
+      --info: #60A5FA;
+      --info-bg: #15253D;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+      font-family: Tahoma, Arial, sans-serif;
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      line-height: 1.65;
+      font-size: 14px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    button, input, select, textarea {
+      font-family: Tahoma, Arial, sans-serif;
+      font-size: 14px;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      min-height: 44px;
+      min-width: 44px;
+      border-radius: var(--radius-sm);
+      transition: background-color 0.18s ease, transform 0.12s ease, border-color 0.18s ease;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+    }
+
+    /* چیدمان اصلی برنامه */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .sidebar {
+      display: none;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding-bottom: 84px;
+    }
+
+    @media (min-width: 960px) {
+      .sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 268px;
+        flex-shrink: 0;
+        background-color: var(--bg-surface);
+        border-left: 1px solid var(--border-color);
+        padding: 20px 14px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+      .main-wrapper {
+        padding-bottom: 28px;
+      }
+      .bottom-nav {
+        display: none !important;
+      }
+    }
+
+    /* هدر بالا */
+    .topbar {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-title-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .brand-name {
+      font-weight: bold;
+      font-size: 16px;
+      color: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .brand-en {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--brand-gold-dark);
+      font-weight: bold;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      background-color: var(--bg-muted);
+      color: var(--brand-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .icon-btn:hover {
+      background-color: var(--brand-soft);
+    }
+
+    /* منوی کناری دسکتاپ */
+    .side-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 20px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-weight: bold;
+      text-align: right;
+      width: 100%;
+    }
+
+    .nav-item:hover {
+      background-color: var(--bg-muted);
+      color: var(--text-main);
+    }
+
+    .nav-item.active {
+      background-color: var(--brand-primary);
+      color: #FFFFFF;
+    }
+
+    /* منوی پایین موبایل (۵ گزینه اصلی) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background-color: var(--bg-surface);
+      border-top: 1px solid var(--border-color);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 4px;
+      z-index: 40;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .bottom-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 6px 2px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      min-width: 0;
+    }
+
+    .bottom-nav-btn span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .bottom-nav-btn.active {
+      color: var(--brand-primary);
+      background-color: var(--brand-soft);
+      font-weight: bold;
+    }
+
+    /* محتوای اصلی */
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .container {
+        padding: 22px;
+      }
+    }
+
+    /* کارت‌ها و شبکه‌ها */
+    .card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+      min-width: 0;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (min-width: 640px) {
+      .grid-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    }
+
+    @media (min-width: 900px) {
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* دکمه‌ها */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      font-weight: bold;
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: var(--brand-primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--brand-primary-hover);
+    }
+
+    .btn-gold {
+      background-color: var(--brand-gold);
+      color: #23141A;
+    }
+
+    .btn-gold:hover {
+      background-color: var(--brand-gold-dark);
+      color: #FFFFFF;
+    }
+
+    .btn-soft {
+      background-color: var(--brand-soft);
+      color: var(--brand-primary);
+    }
+
+    .btn-soft:hover {
+      filter: brightness(0.96);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--bg-muted);
+    }
+
+    .btn-danger {
+      background-color: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid currentColor;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      min-height: 36px;
+      font-size: 12px;
+    }
+
+    /* فرم‌ها */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-weight: bold;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .form-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-app);
+      color: var(--text-main);
+    }
+
+    .form-control.invalid {
+      border-color: var(--danger);
+      background-color: var(--danger-bg);
+    }
+
+    .field-error {
+      font-size: 12px;
+      color: var(--danger);
+      font-weight: bold;
+    }
+
+    /* نشانگرها و پیام‌ها */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: bold;
+      background-color: var(--brand-soft);
+      color: var(--brand-primary);
+    }
+
+    .badge-gold {
+      background-color: rgba(213, 173, 98, 0.22);
+      color: var(--brand-gold-dark);
+    }
+
+    [data-theme="dark"] .badge-gold {
+      color: var(--brand-gold);
+    }
+
+    .alert-box {
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 14px;
+      font-size: 13px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border: 1px solid transparent;
+    }
+
+    .alert-info { background-color: var(--info-bg); color: var(--info); border-color: rgba(29, 78, 216, 0.25); }
+    .alert-warning { background-color: var(--warning-bg); color: var(--warning); border-color: rgba(156, 101, 0, 0.25); }
+    .alert-success { background-color: var(--success-bg); color: var(--success); border-color: rgba(30, 126, 83, 0.25); }
+    .alert-danger { background-color: var(--danger-bg); color: var(--danger); border-color: rgba(180, 35, 24, 0.25); }
+
+    /* نوار پیشرفت */
+    .progress-track {
+      width: 100%;
+      height: 10px;
+      background-color: var(--bg-muted);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-primary), var(--brand-gold));
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+
+    /* کارت‌های آمار داشبورد */
+    .stat-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .stat-value {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--brand-primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* تب‌های داخلی */
+    .tabs-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+
+    .tab-pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      white-space: nowrap;
+      font-size: 13px;
+      min-height: 38px;
+    }
+
+    .tab-pill.active {
+      background-color: var(--brand-primary);
+      color: #FFFFFF;
+      border-color: var(--brand-primary);
+      font-weight: bold;
+    }
+
+    /* کارت غذا */
+    .food-item-card {
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      background-color: var(--bg-surface);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .food-top {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .food-thumb {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-sm);
+      background-color: var(--brand-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--brand-primary);
+    }
+
+    .macro-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      background-color: var(--bg-muted);
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .macro-row strong {
+      display: block;
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    /* تقویم */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+
+    .cal-day-header {
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--text-muted);
+      padding: 6px 0;
+    }
+
+    .cal-cell {
+      min-height: 44px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-app);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      position: relative;
+      padding: 4px 2px;
+    }
+
+    .cal-cell.selected {
+      background-color: var(--brand-primary);
+      color: #FFFFFF;
+      border-color: var(--brand-primary);
+      font-weight: bold;
+    }
+
+    .cal-cell.has-data::after {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--brand-gold);
+      margin-top: 2px;
+    }
+
+    .cal-cell.empty {
+      border: none;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    /* مودال و دیالوگ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 8, 11, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 60;
+    }
+
+    .modal-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 480px;
+      max-height: 88vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Toast پیام زنده */
+    .toast-container {
+      position: fixed;
+      top: 72px;
+      left: 16px;
+      right: 16px;
+      z-index: 70;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      pointer-events: auto;
+      background-color: var(--text-main);
+      color: var(--bg-surface);
+      padding: 10px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: bold;
+      box-shadow: var(--shadow-md);
+      max-width: 420px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* خوشامدگویی */
+    .onboarding-wrap {
+      max-width: 680px;
+      margin: 18px auto;
+      padding: 16px;
+    }
+
+    .hero-banner {
+      background: linear-gradient(135deg, var(--brand-primary) 0%, #4A1026 100%);
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-banner h1 {
+      font-size: 21px;
+      margin-bottom: 6px;
+    }
+
+    .hero-slogan {
+      color: #F7D99E;
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    /* نمودارهای SVG */
+    .chart-box {
+      width: 100%;
+      overflow: hidden;
+      padding-top: 6px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px 16px;
+      color: var(--text-muted);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      background-color: var(--bg-app);
+    }
+
+    .empty-state p {
+      margin: 8px 0 14px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .flex-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .flex-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .text-muted { color: var(--text-muted); }
+    .text-sm { font-size: 12px; }
+    .text-xs { font-size: 11px; }
+    .font-bold { font-weight: bold; }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 14px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <div id="toastRegion" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalRegion"></div>
+  <div id="appRoot"></div>
+
+  <script>
+    'use strict';
+
+    /* =========================================================================
+       ۱. آیکون‌های اختصاصی Inline SVG (لوگوی تندرسا + آیکون‌های رابط کاربری)
+       ========================================================================= */
+    const ICONS = {
+      logo: `<svg width="36" height="36" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+        <rect width="48" height="48" rx="14" fill="#701C3C"/>
+        <path d="M24 9C24 9 13 20.5 13 28.5C13 34.5751 17.9249 39.5 24 39.5C30.0751 39.5 35 34.5751 35 28.5C35 20.5 24 9 24 9Z" fill="#F5DDE5"/>
+        <path d="M24 15C28.5 19.5 30.5 24.5 29.2 30.2C27.8 34.2 24 36 24 36C24 36 20.8 31.8 21.8 25.8C22.5 21.5 24 15 24 15Z" fill="#D5AD62"/>
+        <path d="M18 29L22 33L31 23" stroke="#701C3C" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>`,
+      home: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>`,
+      food: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/></svg>`,
+      water: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
+      reports: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+      profile: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+      sparkle: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2L12 3z"/></svg>`,
+      calendar: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+      settings: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
+      sun: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`,
+      moon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+      plus: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+      edit: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+      trash: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>`,
+      heart: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+      activity: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+      info: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+      check: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>`,
+      bell: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`
+    };
+
+    /* تصویر برداری اختصاصی بر اساس دسته‌بندی غذا (بدون تصویر اینترنتی) */
+    function getFoodIllustrationSVG(category) {
+      const map = {
+        'غذاهای ایرانی': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="19" r="10" fill="#701C3C"/><path d="M8 18C8 13 24 13 24 18" fill="#D5AD62"/><circle cx="13" cy="16" r="1.5" fill="#FFF"/><circle cx="19" cy="16" r="1.5" fill="#FFF"/></svg>`,
+        'غذاهای خانگی': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="6" y="13" width="20" height="11" rx="4" fill="#701C3C"/><path d="M10 10C10 8 22 8 22 10" stroke="#D5AD62" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+        'فست‌فود': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M7 14C7 9 25 9 25 14H7Z" fill="#D5AD62"/><rect x="6" y="16" width="20" height="3" rx="1.5" fill="#701C3C"/><path d="M7 21H25C25 23.5 23 25 20 25H12C9 25 7 23.5 7 21Z" fill="#D5AD62"/></svg>`,
+        'میوه‌ها': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="18" r="8" fill="#701C3C"/><path d="M16 10C16 7 20 6 21 8C19 10 16 10 16 10Z" fill="#1E7E53"/></svg>`,
+        'سبزیجات': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M16 7C21 11 23 18 16 25C9 18 11 11 16 7Z" fill="#1E7E53"/><path d="M16 11V24" stroke="#F5DDE5" stroke-width="1.8"/></svg>`,
+        'لبنیات': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="10" y="8" width="12" height="17" rx="3" fill="#FFFFFF" stroke="#701C3C" stroke-width="2"/><path d="M10 14H22" stroke="#D5AD62" stroke-width="2"/></svg>`,
+        'غلات و نان': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><ellipse cx="16" cy="17" rx="10" ry="6" fill="#D5AD62"/><path d="M11 15L14 19M16 14L19 19" stroke="#701C3C" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+        'نوشیدنی‌ها': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M10 9H22L20 25H12L10 9Z" fill="#701C3C"/><path d="M18 6L16 13" stroke="#D5AD62" stroke-width="2" stroke-linecap="round"/></svg>`,
+        'تنقلات': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="13" cy="17" r="5" fill="#D5AD62"/><circle cx="20" cy="15" r="4" fill="#701C3C"/></svg>`,
+        'غذاهای بین‌المللی': `<svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="9" stroke="#701C3C" stroke-width="2.2"/><path d="M7 16H25M16 7C19 11 19 21 16 25" stroke="#D5AD62" stroke-width="1.8"/></svg>`
+      };
+      return map[category] || ICONS.food;
+    }
+
+    /* =========================================================================
+       ۲. بانک اطلاعاتی جامع غذاها (با برچسب تخمینی و دسته‌بندی ۱۰گانه)
+       ========================================================================= */
+    const FOOD_CATEGORIES = [
+      'همه',
+      'غذاهای ایرانی',
+      'غذاهای خانگی',
+      'فست‌فود',
+      'میوه‌ها',
+      'سبزیجات',
+      'لبنیات',
+      'غلات و نان',
+      'نوشیدنی‌ها',
+      'تنقلات',
+      'غذاهای بین‌المللی'
+    ];
+
+    const MEAL_TYPES = [
+      { id: 'breakfast', label: 'صبحانه' },
+      { id: 'lunch', label: 'ناهار' },
+      { id: 'dinner', label: 'شام' },
+      { id: 'snack', label: 'میان‌وعده' }
+    ];
+
+    const FOOD_DB = [
+      { id: 'f1', name: 'چلوکباب کوبیده (یک سیخ با برنج)', category: 'غذاهای ایرانی', unit: 'پرس متوسط (۳۵۰ گرم)', calories: 680, protein: 34, carbs: 68, fat: 30, fiber: 2.5, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f2', name: 'خورش قورمه‌سبزی با برنج', category: 'غذاهای ایرانی', unit: 'پرس متوسط (۳۴۰ گرم)', calories: 560, protein: 22, carbs: 65, fat: 23, fiber: 5.2, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f3', name: 'خورش قیمه با برنج', category: 'غذاهای ایرانی', unit: 'پرس متوسط (۳۳۰ گرم)', calories: 540, protein: 21, carbs: 67, fat: 20, fiber: 4.8, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f4', name: 'زرشک‌پلو با مرغ (سینه)', category: 'غذاهای ایرانی', unit: 'پرس متوسط (۳۵۰ گرم)', calories: 580, protein: 38, carbs: 66, fat: 17, fiber: 2.8, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f5', name: 'آش رشته', category: 'غذاهای ایرانی', unit: 'کاسه متوسط (۲۵۰ گرم)', calories: 290, protein: 11, carbs: 42, fat: 8.5, fiber: 6.5, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f6', name: 'میرزاقاسمی', category: 'غذاهای ایرانی', unit: 'بشقاب کوچک (۲۰۰ گرم)', calories: 230, protein: 8, carbs: 14, fat: 16, fiber: 4.5, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f7', name: 'عدس‌پلو با کشمش', category: 'غذاهای ایرانی', unit: 'پرس متوسط (۳۰۰ گرم)', calories: 470, protein: 16, carbs: 74, fat: 11, fiber: 7.4, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+
+      { id: 'f8', name: 'تخم‌مرغ آب‌پز کامل', category: 'غذاهای خانگی', unit: 'یک عدد متوسط (۵۰ گرم)', calories: 78, protein: 6.3, carbs: 0.6, fat: 5.3, fiber: 0, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f9', name: 'املت گوجه‌فرنگی خانگی', category: 'غذاهای خانگی', unit: 'پرس یک‌نفره (۱۸۰ گرم)', calories: 245, protein: 13, carbs: 9, fat: 17, fiber: 2.1, source: 'مقدار تخمینی (محاسبه ترکیبی استاندارد)' },
+      { id: 'f10', name: 'عدسی ساده خانگی', category: 'غذاهای خانگی', unit: 'کاسه متوسط (۲۴۰ گرم)', calories: 210, protein: 13.5, carbs: 34, fat: 2.2, fiber: 8.2, source: 'مقدار تخمینی (جداول ترکیبات غذایی)' },
+      { id: 'f11', name: 'خوراک لوبیا چیتی', category: 'غذاهای خانگی', unit: 'کاسه متوسط (۲۴۰ گرم)', calories: 255, protein: 14, carbs: 38, fat: 5, fiber: 9.0, source: 'مقدار تخمینی (جداول ترکیبات غذایی)' },
+      { id: 'f12', name: 'سینه مرغ گریل‌شده', category: 'غذاهای خانگی', unit: '۱۰۰ گرم', calories: 165, protein: 31, carbs: 0, fat: 3.6, fiber: 0, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+
+      { id: 'f13', name: 'پیتزا مخلوط', category: 'فست‌فود', unit: 'دو برش متوسط (۲۲۰ گرم)', calories: 580, protein: 24, carbs: 62, fat: 26, fiber: 3.1, source: 'مقدار تخمینی (برآورد ترکیبات فست‌فود)' },
+      { id: 'f14', name: 'همبرگر کلاسیک', category: 'فست‌فود', unit: 'یک عدد کامل (۲۴۰ گرم)', calories: 540, protein: 27, carbs: 44, fat: 28, fiber: 2.4, source: 'مقدار تخمینی (برآورد ترکیبات فست‌فود)' },
+      { id: 'f15', name: 'سیب‌زمینی سرخ‌کرده', category: 'فست‌فود', unit: 'بسته کوچک (۱۰۰ گرم)', calories: 312, protein: 3.4, carbs: 41, fat: 15, fiber: 3.8, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+
+      { id: 'f16', name: 'سیب قرمز یا زرد', category: 'میوه‌ها', unit: 'یک عدد متوسط (۱۵۰ گرم)', calories: 78, protein: 0.4, carbs: 21, fat: 0.3, fiber: 3.6, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f17', name: 'موز', category: 'میوه‌ها', unit: 'یک عدد متوسط (۱۲۰ گرم)', calories: 105, protein: 1.3, carbs: 27, fat: 0.4, fiber: 3.1, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f18', name: 'پرتقال', category: 'میوه‌ها', unit: 'یک عدد متوسط (۱۴۰ گرم)', calories: 66, protein: 1.3, carbs: 16.5, fat: 0.2, fiber: 3.4, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f19', name: 'انار دانه‌شده', category: 'میوه‌ها', unit: 'نصف لیوان (۸۷ گرم)', calories: 72, protein: 1.5, carbs: 16.3, fat: 1.0, fiber: 3.5, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+
+      { id: 'f20', name: 'سالاد شیرازی', category: 'سبزیجات', unit: 'کاسه متوسط (۱۵۰ گرم)', calories: 65, protein: 1.4, carbs: 11, fat: 2.1, fiber: 2.6, source: 'مقدار تخمینی (محاسبه ترکیبی استاندارد)' },
+      { id: 'f21', name: 'خیار و گوجه‌فرنگی تازه', category: 'سبزیجات', unit: 'یک بشقاب کوچک (۱۵۰ گرم)', calories: 28, protein: 1.2, carbs: 6.2, fat: 0.3, fiber: 1.8, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f22', name: 'کلم بروکلی بخارپز', category: 'سبزیجات', unit: 'یک پیمانه (۱۵۰ گرم)', calories: 52, protein: 3.7, carbs: 10.5, fat: 0.6, fiber: 4.8, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+
+      { id: 'f23', name: 'شیر کم‌چرب (۱.۵ درصد)', category: 'لبنیات', unit: 'یک لیوان (۲۴۰ میلی‌لیتر)', calories: 110, protein: 8.2, carbs: 12, fat: 3.6, fiber: 0, source: 'مقدار تخمینی (استاندارد لبنیات)' },
+      { id: 'f24', name: 'ماست یونانی ساده کم‌چرب', category: 'لبنیات', unit: 'یک کاسه کوچک (۱۵۰ گرم)', calories: 115, protein: 15, carbs: 6, fat: 3.0, fiber: 0, source: 'مقدار تخمینی (استاندارد لبنیات)' },
+      { id: 'f25', name: 'پنیر سفید ایرانی', category: 'لبنیات', unit: 'یک قوطی کبریت (۳۰ گرم)', calories: 75, protein: 5.1, carbs: 0.8, fat: 5.8, fiber: 0, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+
+      { id: 'f26', name: 'نان سنگک سبوس‌دار', category: 'غلات و نان', unit: 'یک کف دست (۳۰ گرم)', calories: 78, protein: 2.7, carbs: 15.5, fat: 0.4, fiber: 1.9, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f27', name: 'نان بربری', category: 'غلات و نان', unit: 'یک کف دست (۳۰ گرم)', calories: 82, protein: 2.6, carbs: 16.5, fat: 0.5, fiber: 1.1, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f28', name: 'جو دوسر پرک پخته (اوتمیل)', category: 'غلات و نان', unit: 'یک کاسه (۲۰۰ گرم)', calories: 150, protein: 5.5, carbs: 27, fat: 2.6, fiber: 4.0, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+
+      { id: 'f29', name: 'دوغ سنتی بدون گاز', category: 'نوشیدنی‌ها', unit: 'یک لیوان (۲۴۰ میلی‌لیتر)', calories: 55, protein: 3.2, carbs: 4.8, fat: 2.4, fiber: 0, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+      { id: 'f30', name: 'چای سبز یا سیاه بدون شکر', category: 'نوشیدنی‌ها', unit: 'یک فنجان (۲۰۰ میلی‌لیتر)', calories: 2, protein: 0, carbs: 0.4, fat: 0, fiber: 0, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f31', name: 'آب پرتقال طبیعی خانگی', category: 'نوشیدنی‌ها', unit: 'یک لیوان (۲۰۰ میلی‌لیتر)', calories: 92, protein: 1.4, carbs: 21, fat: 0.4, fiber: 0.4, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+
+      { id: 'f32', name: 'مغز بادام درختی خام', category: 'تنقلات', unit: '۱۰ عدد (۱۲ گرم)', calories: 70, protein: 2.5, carbs: 2.6, fat: 6.0, fiber: 1.5, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f33', name: 'مغز گردو', category: 'تنقلات', unit: '۲ عدد کامل (۱۰ گرم)', calories: 65, protein: 1.5, carbs: 1.4, fat: 6.5, fiber: 0.7, source: 'مقدار تخمینی (مرجع استاندارد USDA)' },
+      { id: 'f34', name: 'خرما مضافتی', category: 'تنقلات', unit: '۲ عدد متوسط (۲۰ گرم)', calories: 56, protein: 0.5, carbs: 15, fat: 0.1, fiber: 1.6, source: 'مقدار تخمینی (جداول ترکیبات غذایی ایران)' },
+
+      { id: 'f35', name: 'پاستا پنه با سس گوجه و ریحان', category: 'غذاهای بین‌المللی', unit: 'یک بشقاب متوسط (۲۸۰ گرم)', calories: 390, protein: 13, carbs: 64, fat: 9, fiber: 4.2, source: 'مقدار تخمینی (محاسبه ترکیبی استاندارد)' },
+      { id: 'f36', name: 'سالاد سزار با مرغ گریل (سس کم)', category: 'غذاهای بین‌المللی', unit: 'یک کاسه بزرگ (۲۶۰ گرم)', calories: 330, protein: 28, carbs: 16, fat: 17, fiber: 3.5, source: 'مقدار تخمینی (محاسبه ترکیبی استاندارد)' },
+      { id: 'f37', name: 'سوشی سبزیجات و سالمون (۶ قطعه)', category: 'غذاهای بین‌المللی', unit: '۶ رول (۱۸۰ گرم)', calories: 275, protein: 14, carbs: 38, fat: 7, fiber: 2.2, source: 'مقدار تخمینی (مرجع استاندارد USDA)' }
+    ];
+
+    /* پیشنهادهای غذایی هوشمند و متعادل */
+    const SMART_SUGGESTIONS = [
+      {
+        id: 'sg1',
+        meal: 'صبحانه',
+        title: 'نان سنگک سبوس‌دار + پنیر + گردو + سبزی و گوجه',
+        tags: ['متعادل', 'سنتی سالم', 'پرفیبر'],
+        ingredients: ['۲ کف دست نان سنگک سبوس‌دار', '۳۰ گرم پنیر کم‌نمک', '۲ عدد گردو', 'خیار، گوجه‌فرنگی و سبزی خوردن'],
+        prep: 'سبزیجات را شسته و خرد کنید. پنیر و گردو را همراه با نان سبوس‌دار و یک فنجان چای کم‌رنگ سرو نمایید.',
+        swap: 'جایگزین گیاهی: به‌جای پنیر می‌توانید از ترکیب ارده و خرما (به مقدار متعادل) یا حُمص خانگی استفاده کنید.'
+      },
+      {
+        id: 'sg2',
+        meal: 'صبحانه',
+        title: 'اوتمیل (جو دوسر) با شیر و موز و دارچین',
+        tags: ['انرژی‌پایدار', 'سریع', 'گیاهخواری'],
+        ingredients: ['۴ قاشق غذاخوری جو دوسر پرک', '۱ لیوان شیر یا شیر بادام', 'نصف موز حلقه‌شده', 'نصف قاشق چای‌خوری دارچین'],
+        prep: 'جو دوسر و شیر را ۵ دقیقه روی حرارت ملایم بپزید تا نرم شود، سپس در کاسه ریخته و با موز و دارچین تزیین کنید.',
+        swap: 'جایگزین بدون لاکتوز: از شیر سویا یا شیر جو دوسر غنی‌شده استفاده کنید.'
+      },
+      {
+        id: 'sg3',
+        meal: 'ناهار',
+        title: 'عدس‌پلو با کشمش و سالاد شیرازی',
+        tags: ['پرفیبر', 'اقتصادی', 'گیاهخواری'],
+        ingredients: ['۱ پیمانه برنج قهوه‌ای یا سفید', 'نصف پیمانه عدس پخته', '۱ قاشق کشمش پلویی', '۱ کاسه سالاد شیرازی با آبغوره'],
+        prep: 'عدس پخته‌شده را لابه‌لای برنج دم کنید و کشمش تفت‌داده‌شده با مقدار کم روغن اضافه نمایید. همراه سالاد تازه میل شود.',
+        swap: 'جایگزین پروتئینی: در صورت تمایل می‌توانید یک عدد تخم‌مرغ آب‌پز یا ۱۰۰ گرم سینه مرغ گریل کنار آن قرار دهید.'
+      },
+      {
+        id: 'sg4',
+        meal: 'ناهار',
+        title: 'خوراک سینه مرغ گریل با سبزیجات بخارپز و نان سبوس‌دار',
+        tags: ['پروتئین بالا', 'سبک', 'متعادل'],
+        ingredients: ['۱۲۰ گرم سینه مرغ مزه‌دارشده با آبلیمو و زعفران', '۱ پیمانه بروکلی و هویج بخارپز', '۱ کف دست نان سنگک'],
+        prep: 'سینه مرغ را بدون روغن زیاد در تابه گریل بپزید و همراه سبزیجات بخارپز و چاشنی آبلیمو تازه سرو کنید.',
+        swap: 'جایگزین دریایی: فیله ماهی قزل‌آلا یا سالمون گریل‌شده جایگزین بسیار خوبی است.'
+      },
+      {
+        id: 'sg5',
+        meal: 'شام',
+        title: 'خوراک لوبیا چیتی یا عدسی گرم با لیموترش تازه',
+        tags: ['شام سبک', 'پرفیبر', 'گیاهخواری'],
+        ingredients: ['۱ کاسه لوبیا چیتی پخته با سس گوجه ملایم', '۱ قاشق چای‌خوری روغن زیتون', 'آب لیموترش تازه و گلپر'],
+        prep: 'لوبیا چیتی را پس از خیساندن کامل بپزید و با پیاز و گوجه‌فرنگی رنده‌شده جا بیندازید. در پایان روغن زیتون اضافه کنید.',
+        swap: 'جایگزین سریع: املت سبزیجات (تخم‌مرغ + اسفناج یا فلفل دلمه‌ای) با ۱ کف دست نان.'
+      },
+      {
+        id: 'sg6',
+        meal: 'شام',
+        title: 'سالاد مدیترانه‌ای با ماست یونانی و سینه مرغ یا نخود پخته',
+        tags: ['کم‌چرب', 'خنک', 'سریع'],
+        ingredients: ['کاهو، خیار، گوجه گیلاسی، زیتون', '۱۰۰ گرم مرغ گریل یا نصف لیوان نخود پخته', '۲ قاشق ماست یونانی و آبلیمو برای سس'],
+        prep: 'تمام سبزیجات را خرد کرده، پروتئین انتخابی را اضافه کنید و با سس ماست یونانی، نعناع خشک و آبلیمو ترکیب نمایید.',
+        swap: 'جایگزین بدون لبنیات: سس را با ترکیب روغن زیتون، آبلیمو و کمی خردل ملایم آماده کنید.'
+      },
+      {
+        id: 'sg7',
+        meal: 'میان‌وعده',
+        title: 'میوه فصل + ۱۰ عدد بادام خام',
+        tags: ['میان‌وعده سالم', 'بدون قند افزوده'],
+        ingredients: ['۱ عدد سیب یا پرتقال متوسط', '۱۰ عدد مغز بادام درختی خام'],
+        prep: 'ترکیب فیبر میوه و چربی مفید مغزها باعث سیری طولانی‌تر و تعادل انرژی بین وعده‌ها می‌شود.',
+        swap: 'جایگزین: ۲ عدد خرما همراه با ۲ عدد مغز گردو و یک فنجان چای سبز.'
+      }
+    ];
+
+    /* =========================================================================
+       ۳. لایه ذخیره‌سازی محلی (IndexedDB نسخه‌بندی‌شده + LocalStorage تنظیمات)
+       ========================================================================= */
+    const DB_NAME = 'TandersaLocalDB_v1';
+    const DB_VERSION = 1;
+    const LS_KEYS = {
+      theme: 'tandersa_v1_theme',
+      unitSystem: 'tandersa_v1_units',
+      waterReminder: 'tandersa_v1_water_reminder',
+      favoriteFoods: 'tandersa_v1_fav_foods'
+    };
+
+    const StorageService = {
+      db: null,
+
+      init() {
+        return new Promise((resolve, reject) => {
+          if (!('indexedDB' in window)) {
+            reject(new Error('مرورگر شما از IndexedDB پشتیبانی نمی‌کند.'));
+            return;
+          }
+          const req = indexedDB.open(DB_NAME, DB_VERSION);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains('profile')) {
+              db.createObjectStore('profile', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('foodLogs')) {
+              const s = db.createObjectStore('foodLogs', { keyPath: 'id' });
+              s.createIndex('date', 'date', { unique: false });
+            }
+            if (!db.objectStoreNames.contains('waterLogs')) {
+              const s = db.createObjectStore('waterLogs', { keyPath: 'id' });
+              s.createIndex('date', 'date', { unique: false });
+            }
+            if (!db.objectStoreNames.contains('activityLogs')) {
+              const s = db.createObjectStore('activityLogs', { keyPath: 'id' });
+              s.createIndex('date', 'date', { unique: false });
+            }
+            if (!db.objectStoreNames.contains('weightLogs')) {
+              const s = db.createObjectStore('weightLogs', { keyPath: 'id' });
+              s.createIndex('date', 'date', { unique: false });
+            }
+          };
+          req.onsuccess = (e) => {
+            this.db = e.target.result;
+            resolve(this.db);
+          };
+          req.onerror = () => reject(new Error('خطا در باز کردن پایگاه داده محلی IndexedDB.'));
+        });
+      },
+
+      tx(storeName, mode, operation) {
+        return new Promise((resolve, reject) => {
+          try {
+            const transaction = this.db.transaction(storeName, mode);
+            const store = transaction.objectStore(storeName);
+            const request = operation(store);
+            transaction.oncomplete = () => resolve(request ? request.result : true);
+            transaction.onerror = () => reject(new Error('خطا در تراکنش ذخیره‌سازی محلی.'));
+          } catch (err) {
+            reject(err);
+          }
+        });
+      },
+
+      getProfile() {
+        return this.tx('profile', 'readonly', (store) => store.get('main_user'));
+      },
+
+      saveProfile(profileObj) {
+        return this.tx('profile', 'readwrite', (store) => store.put({ ...profileObj, id: 'main_user' }));
+      },
+
+      getAll(storeName) {
+        return this.tx(storeName, 'readonly', (store) => store.getAll());
+      },
+
+      putItem(storeName, item) {
+        return this.tx(storeName, 'readwrite', (store) => store.put(item));
+      },
+
+      deleteItem(storeName, id) {
+        return this.tx(storeName, 'readwrite', (store) => store.delete(id));
+      },
+
+      clearAllStores() {
+        const stores = ['profile', 'foodLogs', 'waterLogs', 'activityLogs', 'weightLogs'];
+        return new Promise((resolve, reject) => {
+          try {
+            const transaction = this.db.transaction(stores, 'readwrite');
+            stores.forEach((name) => transaction.objectStore(name).clear());
+            transaction.oncomplete = () => resolve(true);
+            transaction.onerror = () => reject(new Error('خطا در پاک‌سازی پایگاه داده.'));
+          } catch (e) {
+            reject(e);
+          }
+        });
+      },
+
+      getSetting(key, fallback) {
+        try {
+          const val = localStorage.getItem(key);
+          return val !== null ? JSON.parse(val) : fallback;
+        } catch (e) {
+          return fallback;
+        }
+      },
+
+      setSetting(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+          console.warn('خطا در ذخیره تنظیمات LocalStorage:', e);
+        }
+      }
+    };
+
+    /* =========================================================================
+       ۴. توابع کمکی تاریخ، فرمت‌دهی و محاسبات ایمن سلامتی
+       ========================================================================= */
+    function getTodayISO() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function shiftDateISO(isoDate, daysDelta) {
+      const [y, m, d] = isoDate.split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      dt.setDate(dt.getDate() + daysDelta);
+      const ny = dt.getFullYear();
+      const nm = String(dt.getMonth() + 1).padStart(2, '0');
+      const nd = String(dt.getDate()).padStart(2, '0');
+      return `${ny}-${nm}-${nd}`;
+    }
+
+    function formatPersianDate(isoDate) {
+      try {
+        const [y, m, d] = isoDate.split('-').map(Number);
+        const dt = new Date(y, m - 1, d);
+        return new Intl.DateTimeFormat('fa-IR', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }).format(dt);
+      } catch (e) {
+        return isoDate;
+      }
+    }
+
+    function toPersianDigits(num) {
+      if (num === null || num === undefined) return '';
+      const persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+      return String(num).replace(/\d/g, (d) => persian[Number(d)]);
+    }
+
+    function round1(val) {
+      return Math.round((Number(val) || 0) * 10) / 10;
+    }
+
+    function generateId(prefix) {
+      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    }
+
+    /* محاسبات شاخص‌ها با رعایت کامل ایمنی گروه سنی زیر ۱۸ سال */
+    function evaluateHealthMetrics(profile) {
+      if (!profile) return null;
+      const age = Number(profile.age);
+      const heightCm = Number(profile.height);
+      const weightKg = Number(profile.weight);
+      const isMinor = age < 18;
+
+      // نیاز آب تخمینی بر اساس وزن (حدود ۳۰ میلی‌لیتر به ازای هر کیلوگرم، حداقل ۱۵۰۰ و حداکثر ۳۵۰۰)
+      const suggestedWaterMl = Math.min(3500, Math.max(1500, Math.round((weightKg * 30) / 50) * 50));
+
+      if (isMinor) {
+        return {
+          isMinor: true,
+          bmi: null,
+          bmiCategory: null,
+          estimatedEnergy: null,
+          suggestedWaterMl
+        };
+      }
+
+      const heightM = heightCm / 100;
+      const bmi = round1(weightKg / (heightM * heightM));
+      let bmiCategory = 'در محدوده متعادل غربالگری';
+      if (bmi < 18.5) bmiCategory = 'کمتر از محدوده متعادل غربالگری';
+      else if (bmi >= 25 && bmi < 30) bmiCategory = 'بالاتر از محدوده متعادل غربالگری';
+      else if (bmi >= 30) bmiCategory = 'محدوده نیازمند بررسی تخصصی';
+
+      // برآورد پایه انرژی روزانه (فرمول تخمینی عمومی بدون ادعای پزشکی)
+      const activityFactorMap = {
+        sedentary: 1.2,
+        light: 1.375,
+        moderate: 1.55,
+        active: 1.725
+      };
+      const factor = activityFactorMap[profile.activityLevel] || 1.375;
+      const baseBmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 78;
+      const estimatedEnergy = Math.round((baseBmr * factor) / 10) * 10;
+
+      return {
+        isMinor: false,
+        bmi,
+        bmiCategory,
+        estimatedEnergy,
+        suggestedWaterMl
+      };
+    }
+
+    /* =========================================================================
+       ۵. وضعیت سراسری اپلیکیشن (State Management)
+       ========================================================================= */
+    const state = {
+      loading: true,
+      error: null,
+      activePage: 'dashboard', // dashboard | food | water | reports | profile | suggestions | history | settings
+      profile: null,
+      foodLogs: [],
+      waterLogs: [],
+      activityLogs: [],
+      weightLogs: [],
+      selectedDate: getTodayISO(),
+      calendarMonthOffset: 0,
+      reportDays: 7,
+      foodFilter: {
+        search: '',
+        category: 'همه',
+        sortBy: 'name', // name | caloriesAsc | caloriesDesc | proteinDesc
+        onlyFavorites: false
+      },
+      suggestionMealFilter: 'همه',
+      settings: {
+        theme: document.documentElement.getAttribute('data-theme') || 'light',
+        unitSystem: StorageService.getSetting(LS_KEYS.unitSystem, 'metric'), // metric | glass
+        waterReminder: StorageService.getSetting(LS_KEYS.waterReminder, { enabled: false, intervalMin: 120 }),
+        favorites: StorageService.getSetting(LS_KEYS.favoriteFoods, [])
+      },
+      reminderTimerId: null
+    };
+
+    /* =========================================================================
+       ۶. سیستم پیام‌های زنده (Toast) و پنجره‌های تأیید/فرم (Modal)
+       ========================================================================= */
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastRegion');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      if (type === 'success') toast.style.backgroundColor = 'var(--success)';
+      if (type === 'danger') toast.style.backgroundColor = 'var(--danger)';
+
+      const span = document.createElement('span');
+      span.textContent = message;
+
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = 'بستن';
+      closeBtn.style.color = '#FFFFFF';
+      closeBtn.style.minHeight = '30px';
+      closeBtn.style.padding = '2px 8px';
+      closeBtn.style.fontSize = '12px';
+      closeBtn.onclick = () => toast.remove();
+
+      toast.appendChild(span);
+      toast.appendChild(closeBtn);
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+      }, 4000);
+    }
+
+    function openModal({ title, buildBody, onConfirm, confirmText = 'تأیید', confirmClass = 'btn-primary', showCancel = true }) {
+      const region = document.getElementById('modalRegion');
+      region.innerHTML = '';
+
+      const backdrop = document.createElement('div');
+      backdrop.className = 'modal-backdrop';
+      backdrop.setAttribute('role', 'dialog');
+      backdrop.setAttribute('aria-modal', 'true');
+
+      const card = document.createElement('div');
+      card.className = 'modal-card';
+
+      const header = document.createElement('div');
+      header.className = 'flex-between mb-3';
+
+      const h3 = document.createElement('h3');
+      h3.style.fontSize = '16px';
+      h3.textContent = title;
+
+      const closeX = document.createElement('button');
+      closeX.className = 'icon-btn';
+      closeX.setAttribute('aria-label', 'بستن پنجره');
+      closeX.textContent = '✕';
+      closeX.onclick = closeModal;
+
+      header.appendChild(h3);
+      header.appendChild(closeX);
+      card.appendChild(header);
+
+      const bodyWrap = document.createElement('div');
+      buildBody(bodyWrap);
+      card.appendChild(bodyWrap);
+
+      const footer = document.createElement('div');
+      footer.className = 'flex-row mt-3';
+      footer.style.justifyContent = 'flex-end';
+
+      if (showCancel) {
+        const cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'btn btn-outline';
+        cancelBtn.textContent = 'انصراف';
+        cancelBtn.onclick = closeModal;
+        footer.appendChild(cancelBtn);
+      }
+
+      if (onConfirm) {
+        const okBtn = document.createElement('button');
+        okBtn.type = 'button';
+        okBtn.className = `btn ${confirmClass}`;
+        okBtn.textContent = confirmText;
+        okBtn.onclick = () => {
+          const shouldClose = onConfirm();
+          if (shouldClose !== false) closeModal();
+        };
+        footer.appendChild(okBtn);
+      }
+
+      card.appendChild(footer);
+      backdrop.appendChild(card);
+      region.appendChild(backdrop);
+
+      backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeModal();
+      });
+    }
+
+    function closeModal() {
+      const region = document.getElementById('modalRegion');
+      region.innerHTML = '';
+    }
+
+    /* =========================================================================
+       ۷. مدیریت یادآور آب و تغییر تم
+       ========================================================================= */
+    function applyTheme(theme) {
+      state.settings.theme = theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      try {
+        localStorage.setItem(LS_KEYS.theme, theme);
+      } catch (e) {}
+    }
+
+    function setupWaterReminderTimer() {
+      if (state.reminderTimerId) {
+        clearInterval(state.reminderTimerId);
+        state.reminderTimerId = null;
+      }
+      const rem = state.settings.waterReminder;
+      if (rem && rem.enabled && Number(rem.intervalMin) >= 15) {
+        state.reminderTimerId = setInterval(() => {
+          showToast('یادآور تندرسا: زمان نوشیدن یک لیوان آب گوارا فرا رسیده است!', 'info');
+        }, Number(rem.intervalMin) * 60 * 1000);
+      }
+    }
+
+    /* =========================================================================
+       ۸. رندر نمودارهای تعاملی و واکنش‌گرا با Inline SVG (بدون کتابخانه خارجی)
+       ========================================================================= */
+    function createBarChartSVG(dataPoints, unitLabel, barColor = '#701C3C') {
+      // dataPoints: [{ label: 'شنبه', value: 1500, fullDate: '2026-...' }]
+      const width = 560;
+      const height = 210;
+      const padLeft = 38;
+      const padRight = 16;
+      const padTop = 20;
+      const padBottom = 38;
+      const chartW = width - padLeft - padRight;
+      const chartH = height - padTop - padBottom;
+
+      const maxVal = Math.max(...dataPoints.map((d) => d.value), 10);
+      const count = dataPoints.length || 1;
+      const slotW = chartW / count;
+      const barW = Math.min(34, slotW * 0.56);
+
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', 'auto');
+      svg.setAttribute('role', 'img');
+      svg.setAttribute('aria-label', `نمودار ${unitLabel}`);
+
+      // خطوط راهنمای افقی
+      [0, 0.5, 1].forEach((ratio) => {
+        const y = padTop + chartH - ratio * chartH;
+        const line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', padLeft);
+        line.setAttribute('x2', width - padRight);
+        line.setAttribute('y1', y);
+        line.setAttribute('y2', y);
+        line.setAttribute('stroke', 'var(--border-color)');
+        line.setAttribute('stroke-dasharray', ratio === 0 ? '0' : '4 4');
+        svg.appendChild(line);
+
+        const txt = document.createElementNS(svgNS, 'text');
+        txt.setAttribute('x', padLeft - 6);
+        txt.setAttribute('y', y + 4);
+        txt.setAttribute('text-anchor', 'end');
+        txt.setAttribute('font-size', '10');
+        txt.setAttribute('fill', 'var(--text-muted)');
+        txt.textContent = toPersianDigits(Math.round(maxVal * ratio));
+        svg.appendChild(txt);
+      });
+
+      dataPoints.forEach((pt, idx) => {
+        const barH = (pt.value / maxVal) * chartH;
+        const x = padLeft + idx * slotW + (slotW - barW) / 2;
+        const y = padTop + chartH - barH;
+
+        const rect = document.createElementNS(svgNS, 'rect');
+        rect.setAttribute('x', x);
+        rect.setAttribute('y', y);
+        rect.setAttribute('width', barW);
+        rect.setAttribute('height', Math.max(barH, pt.value > 0 ? 4 : 0));
+        rect.setAttribute('rx', '5');
+        rect.setAttribute('fill', barColor);
+        svg.appendChild(rect);
+
+        if (pt.value > 0) {
+          const valTxt = document.createElementNS(svgNS, 'text');
+          valTxt.setAttribute('x', x + barW / 2);
+          valTxt.setAttribute('y', y - 5);
+          valTxt.setAttribute('text-anchor', 'middle');
+          valTxt.setAttribute('font-size', '10');
+          valTxt.setAttribute('font-weight', 'bold');
+          valTxt.setAttribute('fill', 'var(--text-main)');
+          valTxt.textContent = toPersianDigits(pt.value);
+          svg.appendChild(valTxt);
+        }
+
+        const lbl = document.createElementNS(svgNS, 'text');
+        lbl.setAttribute('x', x + barW / 2);
+        lbl.setAttribute('y', height - 12);
+        lbl.setAttribute('text-anchor', 'middle');
+        lbl.setAttribute('font-size', '10');
+        lbl.setAttribute('fill', 'var(--text-muted)');
+        lbl.textContent = pt.label;
+        svg.appendChild(lbl);
+      });
+
+      return svg;
+    }
+
+    /* =========================================================================
+       ۹. صفحه خوشامدگویی و تکمیل پروفایل اولیه (Onboarding)
+       ========================================================================= */
+    function renderOnboarding(root) {
+      const wrap = document.createElement('div');
+      wrap.className = 'onboarding-wrap';
+
+      const banner = document.createElement('div');
+      banner.className = 'hero-banner';
+      banner.innerHTML = `
+        <div class="flex-row mb-2">
+          ${ICONS.logo}
+          <div>
+            <div style="font-size:18px;font-weight:bold;">تندرسا | TANDERSA</div>
+            <div class="hero-slogan">تندرسا؛ همراه هوشمند تو برای زندگی سالم‌تر</div>
+          </div>
+        </div>
+        <p style="font-size:13px;opacity:0.95;">
+          «هر روز، یک قدم به سوی زندگی سالم‌تر» — تمام اطلاعات شما به‌صورت محلی (Local-First) فقط روی همین دستگاه ذخیره می‌شود و بدون نیاز به اینترنت قابل استفاده است.
+        </p>
+      `;
+      wrap.appendChild(banner);
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `<h2 class="card-title mb-2">${ICONS.profile} تکمیل اطلاعات پایه برای شخصی‌سازی برنامه</h2>`;
+
+      const form = buildProfileForm(null, async (newProfile) => {
+        openModal({
+          title: 'تأیید ذخیره‌سازی اطلاعات در دستگاه',
+          buildBody: (body) => {
+            const p = document.createElement('p');
+            p.textContent = 'اطلاعات پروفایل شما در پایگاه داده محلی (IndexedDB) همین مرورگر ذخیره می‌شود و هیچ داده‌ای به سرور خارجی ارسال نخواهد شد. آیا مایل به ذخیره و ورود به داشبورد تندرسا هستید؟';
+            body.appendChild(p);
+          },
+          confirmText: 'تأیید و ورود به تندرسا',
+          onConfirm: async () => {
+            try {
+              await StorageService.saveProfile(newProfile);
+              state.profile = newProfile;
+              // ثبت اولین رکورد وزن برای بزرگسالان
+              if (Number(newProfile.age) >= 18) {
+                const wLog = {
+                  id: generateId('wt'),
+                  date: getTodayISO(),
+                  weight: Number(newProfile.weight),
+                  createdAt: Date.now()
+                };
+                await StorageService.putItem('weightLogs', wLog);
+                state.weightLogs.push(wLog);
+              }
+              showToast('پروفایل شما با موفقیت در تندرسا ذخیره شد.', 'success');
+              renderApp();
+            } catch (err) {
+              showToast('خطا در ذخیره‌سازی اطلاعات پروفایل.', 'danger');
+            }
+          }
+        });
+      });
+
+      card.appendChild(form);
+      wrap.appendChild(card);
+      root.appendChild(wrap);
+    }
+
+    function buildProfileForm(existing, onSubmitValid) {
+      const form = document.createElement('form');
+      form.noValidate = true;
+
+      const data = existing || {
+        name: '',
+        age: '',
+        height: '',
+        weight: '',
+        activityLevel: 'light',
+        dietPreference: 'متعادل و متنوع',
+        allergies: '',
+        healthGoal: 'تغذیه سالم و افزایش انرژی'
+      };
+
+      form.innerHTML = `
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="pf_name">نام یا لقب (اختیاری)</label>
+            <input id="pf_name" class="form-control" type="text" maxlength="40" placeholder="مثلاً: سارا" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pf_age">سن (سال) *</label>
+            <input id="pf_age" class="form-control" type="number" min="5" max="115" required placeholder="مثلاً: ۲۸" />
+            <div class="field-error hidden" id="err_age"></div>
+          </div>
+        </div>
+
+        <div id="minorNoticeBox" class="alert-box alert-warning hidden">
+          <span>${ICONS.info}</span>
+          <div>
+            <strong>توجه ویژه برای کاربران زیر ۱۸ سال:</strong>
+            در تندرسا برای افراد زیر ۱۸ سال، تعیین هدف کاهش یا افزایش وزن، محاسبه رژیم کالری و نمایش شاخص BMI بزرگسالان غیرفعال است. ارزیابی رشد و وزن در این سن باید زیر نظر پزشک یا متخصص سلامت کودکان انجام شود.
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="pf_height">قد (سانتی‌متر) *</label>
+            <input id="pf_height" class="form-control" type="number" min="80" max="240" required placeholder="مثلاً: ۱۶۸" />
+            <div class="field-error hidden" id="err_height"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pf_weight">وزن (کیلوگرم) *</label>
+            <input id="pf_weight" class="form-control" type="number" step="0.1" min="15" max="300" required placeholder="مثلاً: ۶۴" />
+            <div class="field-error hidden" id="err_weight"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="pf_activity">میزان فعالیت روزانه *</label>
+            <select id="pf_activity" class="form-control">
+              <option value="sedentary">کم‌تحرک (کار پشت‌میزنشینی)</option>
+              <option value="light">فعالیت سبک (پیاده‌روی کوتاه روزانه)</option>
+              <option value="moderate">فعالیت متوسط (ورزش ۳ تا ۵ روز در هفته)</option>
+              <option value="active">پرتحرک (ورزش منظم یا شغل پرتحرک)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pf_pref">ترجیحات غذایی</label>
+            <select id="pf_pref" class="form-control">
+              <option value="متعادل و متنوع">متعادل و متنوع (همه‌چیزخوار)</option>
+              <option value="سنتی و خانگی">غذاهای سنتی و خانگی</option>
+              <option value="گیاهخواری (وجترین)">گیاهخواری (وجترین)</option>
+              <option value="کم‌قند و پرفیبر">تمرکز بر غذاهای پرفیبر و کم‌قند</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pf_allergies">حساسیت‌های غذایی یا شرایط خاص (اختیاری)</label>
+          <input id="pf_allergies" class="form-control" type="text" maxlength="120" placeholder="مثلاً: حساسیت به بادام‌زمینی، عدم تحمل لاکتوز، دیابت..." />
+          <span class="form-hint">در صورت ثبت حساسیت یا بیماری، سیستم از ارائه توصیه درمانی خودداری کرده و مشورت با متخصص تغذیه را یادآوری می‌کند.</span>
+        </div>
+
+        <div class="form-group" id="goalGroup">
+          <label class="form-label" for="pf_goal">هدف کلی سلامتی</label>
+          <select id="pf_goal" class="form-control">
+            <option value="تغذیه سالم و افزایش انرژی">تغذیه سالم و افزایش انرژی روزانه</option>
+            <option value="بهبود عادت نوشیدن آب">بهبود عادت نوشیدن آب و تحرک</option>
+            <option value="مدیریت متعادل وزن (بزرگسالان)">مدیریت متعادل وزن (ویژه بزرگسالان)</option>
+            <option value="تنوع‌بخشی به وعده‌های غذایی">تنوع‌بخشی و نظم‌دهی به وعده‌ها</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;">
+          ${ICONS.check} ذخیره اطلاعات پروفایل
+        </button>
+      `;
+
+      // مقداردهی ایمن با .value (بدون تزریق HTML)
+      form.querySelector('#pf_name').value = data.name || '';
+      form.querySelector('#pf_age').value = data.age || '';
+      form.querySelector('#pf_height').value = data.height || '';
+      form.querySelector('#pf_weight').value = data.weight || '';
+      form.querySelector('#pf_activity').value = data.activityLevel || 'light';
+      form.querySelector('#pf_pref').value = data.dietPreference || 'متعادل و متنوع';
+      form.querySelector('#pf_allergies').value = data.allergies || '';
+      form.querySelector('#pf_goal').value = data.healthGoal || 'تغذیه سالم و افزایش انرژی';
+
+      const ageInput = form.querySelector('#pf_age');
+      const minorBox = form.querySelector('#minorNoticeBox');
+      const goalSelect = form.querySelector('#pf_goal');
+
+      function checkAgeRule() {
+        const ageVal = Number(ageInput.value);
+        if (ageVal > 0 && ageVal < 18) {
+          minorBox.classList.remove('hidden');
+          // حذف گزینه مدیریت وزن برای افراد زیر ۱۸ سال
+          Array.from(goalSelect.options).forEach((opt) => {
+            if (opt.value.includes('وزن')) opt.disabled = true;
+          });
+          if (goalSelect.value.includes('وزن')) {
+            goalSelect.value = 'تغذیه سالم و افزایش انرژی';
+          }
+        } else {
+          minorBox.classList.add('hidden');
+          Array.from(goalSelect.options).forEach((opt) => {
+            opt.disabled = false;
+          });
+        }
+      }
+
+      ageInput.addEventListener('input', checkAgeRule);
+      checkAgeRule();
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let valid = true;
+
+        const age = Number(form.querySelector('#pf_age').value);
+        const height = Number(form.querySelector('#pf_height').value);
+        const weight = Number(form.querySelector('#pf_weight').value);
+
+        const errAge = form.querySelector('#err_age');
+        const errHeight = form.querySelector('#err_height');
+        const errWeight = form.querySelector('#err_weight');
+
+        [errAge, errHeight, errWeight].forEach((el) => el.classList.add('hidden'));
+        [form.querySelector('#pf_age'), form.querySelector('#pf_height'), form.querySelector('#pf_weight')].forEach((inp) => inp.classList.remove('invalid'));
+
+        if (!age || age < 5 || age > 115) {
+          errAge.textContent = 'لطفاً سن معتبر بین ۵ تا ۱۱۵ سال وارد کنید.';
+          errAge.classList.remove('hidden');
+          form.querySelector('#pf_age').classList.add('invalid');
+          valid = false;
+        }
+        if (!height || height < 80 || height > 240) {
+          errHeight.textContent = 'لطفاً قد معتبر بین ۸۰ تا ۲۴۰ سانتی‌متر وارد کنید.';
+          errHeight.classList.remove('hidden');
+          form.querySelector('#pf_height').classList.add('invalid');
+          valid = false;
+        }
+        if (!weight || weight < 15 || weight > 300) {
+          errWeight.textContent = 'لطفاً وزن معتبر بین ۱۵ تا ۳۰۰ کیلوگرم وارد کنید.';
+          errWeight.classList.remove('hidden');
+          form.querySelector('#pf_weight').classList.add('invalid');
+          valid = false;
+        }
+
+        if (!valid) {
+          showToast('لطفاً خطاهای مشخص‌شده در فرم را اصلاح کنید.', 'danger');
+          return;
+        }
+
+        const sanitizedGoal = age < 18 && goalSelect.value.includes('وزن')
+          ? 'تغذیه سالم و رشد متعادل (با نظر متخصص سلامت کودکان)'
+          : goalSelect.value;
+
+        onSubmitValid({
+          name: form.querySelector('#pf_name').value.trim(),
+          age,
+          height,
+          weight,
+          activityLevel: form.querySelector('#pf_activity').value,
+          dietPreference: form.querySelector('#pf_pref').value,
+          allergies: form.querySelector('#pf_allergies').value.trim(),
+          healthGoal: sanitizedGoal,
+          updatedAt: Date.now()
+        });
+      });
+
+      return form;
+    }
+
+    /* =========================================================================
+       ۱۰. محاسبه خلاصه روزانه برای یک تاریخ مشخص
+       ========================================================================= */
+    function getDailySummary(dateISO) {
+      const foods = state.foodLogs.filter((f) => f.date === dateISO);
+      const waters = state.waterLogs.filter((w) => w.date === dateISO);
+      const activities = state.activityLogs.filter((a) => a.date === dateISO);
+
+      const nutrition = foods.reduce(
+        (acc, item) => {
+          acc.calories += Number(item.calories) || 0;
+          acc.protein += Number(item.protein) || 0;
+          acc.carbs += Number(item.carbs) || 0;
+          acc.fat += Number(item.fat) || 0;
+          acc.fiber += Number(item.fiber) || 0;
+          return acc;
+        },
+        { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 }
+      );
+
+      const totalWaterMl = waters.reduce((sum, w) => sum + (Number(w.amountMl) || 0), 0);
+      const totalActivityMin = activities.reduce((sum, a) => sum + (Number(a.durationMin) || 0), 0);
+      const distinctMeals = new Set(foods.map((f) => f.mealType)).size;
+
+      return {
+        foods,
+        waters,
+        activities,
+        nutrition: {
+          calories: Math.round(nutrition.calories),
+          protein: round1(nutrition.protein),
+          carbs: round1(nutrition.carbs),
+          fat: round1(nutrition.fat),
+          fiber: round1(nutrition.fiber)
+        },
+        totalWaterMl,
+        totalActivityMin,
+        distinctMeals
+      };
+    }
+
+    /* =========================================================================
+       ۱۱. صفحه داشبورد اصلی (Dashboard)
+       ========================================================================= */
+    function renderDashboard(container) {
+      const today = getTodayISO();
+      const summary = getDailySummary(today);
+      const metrics = evaluateHealthMetrics(state.profile);
+      const userName = state.profile.name ? state.profile.name : 'همراه تندرسا';
+
+      // کارت خوشامدگویی و تاریخ
+      const hero = document.createElement('div');
+      hero.className = 'card';
+      hero.style.background = 'linear-gradient(135deg, var(--brand-primary) 0%, #4C1127 100%)';
+      hero.style.color = '#FFFFFF';
+      hero.innerHTML = `
+        <div class="flex-between">
+          <div>
+            <div style="font-size:12px;color:#F7D99E;margin-bottom:4px;">${formatPersianDate(today)}</div>
+            <h2 style="font-size:18px;margin-bottom:4px;">سلام ${escapeHTML(userName)} عزیز!</h2>
+            <p style="font-size:12px;opacity:0.9;">هر روز، یک قدم به سوی زندگی سالم‌تر با تندرسا</p>
+          </div>
+          <div class="flex-row">
+            <button type="button" id="quickAddFoodBtn" class="btn btn-gold btn-sm">${ICONS.plus} ثبت غذا</button>
+            <button type="button" id="quickAddWaterBtn" class="btn btn-soft btn-sm">${ICONS.water} یک لیوان آب</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(hero);
+
+      hero.querySelector('#quickAddFoodBtn').onclick = () => navigateTo('food');
+      hero.querySelector('#quickAddWaterBtn').onclick = () => quickLogWater(250);
+
+      // پیام هشدار تخصصی در صورت وجود حساسیت غذایی یا سن زیر ۱۸
+      if (metrics.isMinor) {
+        const minorAlert = document.createElement('div');
+        minorAlert.className = 'alert-box alert-warning';
+        minorAlert.innerHTML = `<span>${ICONS.info}</span><div><strong>حالت پایش رشد نوجوانان فعال است:</strong> محاسبه کالری هدف و BMI بزرگسالان نمایش داده نمی‌شود. تمرکز برنامه بر تنوع غذایی، آب کافی و نشاط روزانه است.</div>`;
+        container.appendChild(minorAlert);
+      }
+
+      if (state.profile.allergies) {
+        const allergyAlert = document.createElement('div');
+        allergyAlert.className = 'alert-box alert-info';
+        const txt = document.createElement('div');
+        txt.textContent = `حساسیت/شرایط ثبت‌شده شما: «${state.profile.allergies}». تندرسا توصیه درمانی ارائه نمی‌دهد؛ برای برنامه دقیق با متخصص تغذیه مشورت کنید.`;
+        allergyAlert.innerHTML = `<span>${ICONS.info}</span>`;
+        allergyAlert.appendChild(txt);
+        container.appendChild(allergyAlert);
+      }
+
+      // ۴ کارت آمار کلیدی روزانه
+      const statsGrid = document.createElement('div');
+      statsGrid.className = 'grid-4 mb-3';
+
+      const waterPct = Math.min(100, Math.round((summary.totalWaterMl / metrics.suggestedWaterMl) * 100));
+      const energyCardHTML = metrics.isMinor
+        ? `<div class="stat-value">${toPersianDigits(summary.distinctMeals)} از ۴</div><div class="stat-label">تنوع وعده‌های امروز</div>`
+        : `<div class="stat-value">${toPersianDigits(summary.nutrition.calories)} <span class="text-xs">کالری</span></div><div class="stat-label">برآورد پایه: ~${toPersianDigits(metrics.estimatedEnergy)}</div>`;
+
+      statsGrid.innerHTML = `
+        <div class="stat-card">
+          <div class="flex-between"><span class="text-muted text-xs">تغذیه امروز</span>${ICONS.food}</div>
+          ${energyCardHTML}
+        </div>
+        <div class="stat-card">
+          <div class="flex-between"><span class="text-muted text-xs">آب مصرفی</span>${ICONS.water}</div>
+          <div class="stat-value">${toPersianDigits(summary.totalWaterMl)} <span class="text-xs">ml</span></div>
+          <div class="stat-label">${toPersianDigits(waterPct)}٪ از برآورد روزانه (${toPersianDigits(metrics.suggestedWaterMl)} ml)</div>
+        </div>
+        <div class="stat-card">
+          <div class="flex-between"><span class="text-muted text-xs">وعده‌های ثبت‌شده</span>${ICONS.sparkle}</div>
+          <div class="stat-value">${toPersianDigits(summary.foods.length)} <span class="text-xs">مورد</span></div>
+          <div class="stat-label">در ${toPersianDigits(summary.distinctMeals)} وعده غذایی</div>
+        </div>
+        <div class="stat-card">
+          <div class="flex-between"><span class="text-muted text-xs">فعالیت بدنی</span>${ICONS.activity}</div>
+          <div class="stat-value">${toPersianDigits(summary.totalActivityMin)} <span class="text-xs">دقیقه</span></div>
+          <div class="stat-label">تحرک ثبت‌شده امروز</div>
+        </div>
+      `;
+      container.appendChild(statsGrid);
+
+      // نمودار پیشرفت روزانه + ثبت سریع فعالیت بدنی
+      const midGrid = document.createElement('div');
+      midGrid.className = 'grid-2';
+
+      // کارت پیشرفت درشت‌مغذی‌ها و آب
+      const progressCard = document.createElement('div');
+      progressCard.className = 'card';
+      const energyPct = !metrics.isMinor && metrics.estimatedEnergy > 0
+        ? Math.min(100, Math.round((summary.nutrition.calories / metrics.estimatedEnergy) * 100))
+        : Math.min(100, summary.distinctMeals * 25);
+
+      progressCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.reports} پیشرفت روزانه</h3>
+          <span class="badge">امروز</span>
+        </div>
+        <div class="mb-3">
+          <div class="flex-between text-sm">
+            <span>نوشیدن آب (${toPersianDigits(summary.totalWaterMl)} / ${toPersianDigits(metrics.suggestedWaterMl)} میلی‌لیتر)</span>
+            <strong>${toPersianDigits(waterPct)}٪</strong>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${waterPct}%"></div></div>
+        </div>
+        <div class="mb-3">
+          <div class="flex-between text-sm">
+            <span>${metrics.isMinor ? 'پوشش وعده‌های اصلی امروز' : 'تناسب انرژی ثبت‌شده با برآورد پایه'}</span>
+            <strong>${toPersianDigits(energyPct)}٪</strong>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:${energyPct}%"></div></div>
+        </div>
+        <div class="macro-row">
+          <div><span class="text-muted">پروتئین</span><strong>${toPersianDigits(summary.nutrition.protein)} گرم</strong></div>
+          <div><span class="text-muted">کربوهیدرات</span><strong>${toPersianDigits(summary.nutrition.carbs)} گرم</strong></div>
+          <div><span class="text-muted">چربی</span><strong>${toPersianDigits(summary.nutrition.fat)} گرم</strong></div>
+          <div><span class="text-muted">فیبر</span><strong>${toPersianDigits(summary.nutrition.fiber)} گرم</strong></div>
+        </div>
+        ${!metrics.isMinor ? `<p class="text-xs text-muted mt-2">* برآورد انرژی روزانه صرفاً یک تخمین آماری عمومی است و نسخه پزشکی محسوب نمی‌شود.</p>` : ''}
+      `;
+      midGrid.appendChild(progressCard);
+
+      // کارت شاخص‌های سلامتی و ثبت سریع فعالیت بدنی
+      const healthCard = document.createElement('div');
+      healthCard.className = 'card';
+      healthCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.heart} شاخص‌های سلامتی و تحرک</h3>
+          <button type="button" id="logActivityModalBtn" class="btn btn-soft btn-sm">${ICONS.plus} ثبت فعالیت</button>
+        </div>
+        ${metrics.isMinor
+          ? `<div class="alert-box alert-info"><div>شاخص BMI بزرگسالان برای زیر ۱۸ سال نمایش داده نمی‌شود. شاخص‌های فعال شما: کیفیت تنوع وعده‌ها (${toPersianDigits(summary.distinctMeals)}/۴)، آب مصرفی و تحرک روزانه.</div></div>`
+          : `<div class="mb-2" style="padding:10px;border-radius:10px;background:var(--bg-muted);">
+              <div class="flex-between">
+                <span class="text-sm font-bold">شاخص توده بدنی (BMI): ${toPersianDigits(metrics.bmi)}</span>
+                <span class="badge badge-gold">${metrics.bmiCategory}</span>
+              </div>
+              <p class="text-xs text-muted mt-2">BMI صرفاً یک شاخص غربالگری اولیه است و به‌تنهایی مبنای تشخیص سلامت یا تجویز رژیم نیست.</p>
+            </div>`
+        }
+        <div id="todayActivityList"></div>
+      `;
+      midGrid.appendChild(healthCard);
+      container.appendChild(midGrid);
+
+      healthCard.querySelector('#logActivityModalBtn').onclick = () => openActivityModal(today);
+
+      const actList = healthCard.querySelector('#todayActivityList');
+      if (summary.activities.length === 0) {
+        actList.innerHTML = `<p class="text-sm text-muted">امروز هنوز فعالیت بدنی ثبت نکرده‌اید. حتی ۱۵ دقیقه پیاده‌روی ارزشمند است.</p>`;
+      } else {
+        summary.activities.forEach((act) => {
+          const row = document.createElement('div');
+          row.className = 'flex-between';
+          row.style.padding = '8px 0';
+          row.style.borderBottom = '1px solid var(--border-color)';
+
+          const info = document.createElement('span');
+          info.className = 'text-sm';
+          info.textContent = `${act.title} — ${toPersianDigits(act.durationMin)} دقیقه`;
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn btn-sm btn-outline';
+          delBtn.setAttribute('aria-label', 'حذف فعالیت');
+          delBtn.innerHTML = ICONS.trash;
+          delBtn.onclick = () => confirmDeleteRecord('activityLogs', act.id, 'فعالیت بدنی');
+
+          row.appendChild(info);
+          row.appendChild(delBtn);
+          actList.appendChild(row);
+        });
+      }
+
+      // دسترسی سریع به صفحات تکمیلی (پیشنهاد هوشمند و تاریخچه)
+      const quickLinksCard = document.createElement('div');
+      quickLinksCard.className = 'card';
+      quickLinksCard.innerHTML = `
+        <div class="flex-between">
+          <div>
+            <h3 class="card-title">${ICONS.sparkle} پیشنهادهای غذایی هوشمند و تاریخچه</h3>
+            <p class="text-sm text-muted">ایده‌های وعده متعادل ببینید یا سوابق روزهای گذشته را بررسی و ویرایش کنید.</p>
+          </div>
+          <div class="flex-row">
+            <button type="button" id="goSuggestionsBtn" class="btn btn-primary btn-sm">پیشنهادهای غذایی</button>
+            <button type="button" id="goHistoryBtn" class="btn btn-outline btn-sm">${ICONS.calendar} تقویم تاریخچه</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(quickLinksCard);
+
+      quickLinksCard.querySelector('#goSuggestionsBtn').onclick = () => navigateTo('suggestions');
+      quickLinksCard.querySelector('#goHistoryBtn').onclick = () => navigateTo('history');
+    }
+
+    function openActivityModal(dateISO) {
+      openModal({
+        title: 'ثبت فعالیت بدنی',
+        buildBody: (body) => {
+          body.innerHTML = `
+            <div class="form-group">
+              <label class="form-label" for="act_title">نوع فعالیت *</label>
+              <input id="act_title" class="form-control" type="text" maxlength="50" placeholder="مثلاً: پیاده‌روی تند، دوچرخه‌سواری، شنا" value="پیاده‌روی" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="act_min">مدت زمان (دقیقه) *</label>
+              <input id="act_min" class="form-control" type="number" min="5" max="480" value="30" />
+            </div>
+          `;
+        },
+        confirmText: 'ثبت فعالیت',
+        onConfirm: async () => {
+          const title = document.getElementById('act_title').value.trim();
+          const durationMin = Number(document.getElementById('act_min').value);
+          if (!title || !durationMin || durationMin < 1 || durationMin > 600) {
+            showToast('لطفاً عنوان و مدت معتبر وارد کنید.', 'danger');
+            return false;
+          }
+          const item = {
+            id: generateId('act'),
+            date: dateISO,
+            title,
+            durationMin,
+            createdAt: Date.now()
+          };
+          await StorageService.putItem('activityLogs', item);
+          state.activityLogs.push(item);
+          showToast('فعالیت بدنی با موفقیت ثبت شد.', 'success');
+          renderApp();
+        }
+      });
+    }
+
+    /* =========================================================================
+       ۱۲. صفحه ثبت غذا و بانک اطلاعاتی تغذیه (Food Logger & Database)
+       ========================================================================= */
+    function renderFoodPage(container) {
+      const targetDate = state.selectedDate;
+      const daily = getDailySummary(targetDate);
+
+      // نوار انتخاب تاریخ دفترچه
+      const dateBar = document.createElement('div');
+      dateBar.className = 'card flex-between';
+      dateBar.innerHTML = `
+        <div>
+          <span class="text-xs text-muted">دفترچه غذایی روز:</span>
+          <div class="font-bold">${formatPersianDate(targetDate)}</div>
+        </div>
+        <div class="flex-row">
+          <input type="date" id="foodDatePicker" class="form-control" style="width:auto;min-height:38px;" value="${targetDate}" aria-label="انتخاب تاریخ دفترچه غذا" />
+          ${targetDate !== getTodayISO() ? `<button type="button" id="resetTodayFoodBtn" class="btn btn-soft btn-sm">بازگشت به امروز</button>` : ''}
+        </div>
+      `;
+      container.appendChild(dateBar);
+
+      dateBar.querySelector('#foodDatePicker').onchange = (e) => {
+        if (e.target.value) {
+          state.selectedDate = e.target.value;
+          renderApp();
+        }
+      };
+      const resetBtn = dateBar.querySelector('#resetTodayFoodBtn');
+      if (resetBtn) {
+        resetBtn.onclick = () => {
+          state.selectedDate = getTodayISO();
+          renderApp();
+        };
+      }
+
+      // خلاصه مجموع اطلاعات تغذیه‌ای ثبت‌شده در این روز
+      const summaryCard = document.createElement('div');
+      summaryCard.className = 'card';
+      summaryCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.food} مجموع تغذیه ثبت‌شده (${toPersianDigits(daily.foods.length)} مورد)</h3>
+          <span class="badge badge-gold">مقادیر تخمینی</span>
+        </div>
+        <div class="grid-4 mb-2">
+          <div class="stat-card">
+            <span class="stat-label">انرژی تقریبی</span>
+            <span class="stat-value">${toPersianDigits(daily.nutrition.calories)} <span class="text-xs">kcal</span></span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">پروتئین</span>
+            <span class="stat-value">${toPersianDigits(daily.nutrition.protein)} <span class="text-xs">گرم</span></span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">کربوهیدرات</span>
+            <span class="stat-value">${toPersianDigits(daily.nutrition.carbs)} <span class="text-xs">گرم</span></span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">چربی / فیبر</span>
+            <span class="stat-value">${toPersianDigits(daily.nutrition.fat)} / ${toPersianDigits(daily.nutrition.fiber)} <span class="text-xs">گرم</span></span>
+          </div>
+        </div>
+        <div id="loggedMealsContainer"></div>
+      `;
+      container.appendChild(summaryCard);
+
+      // نمایش وعده‌های ثبت‌شده (صبحانه، ناهار، شام، میان‌وعده)
+      const mealsWrap = summaryCard.querySelector('#loggedMealsContainer');
+      if (daily.foods.length === 0) {
+        mealsWrap.innerHTML = `<div class="empty-state"><p>هنوز غذایی برای این تاریخ ثبت نشده است. از بانک اطلاعاتی زیر غذا انتخاب و ثبت کنید.</p></div>`;
+      } else {
+        MEAL_TYPES.forEach((meal) => {
+          const mealItems = daily.foods.filter((f) => f.mealType === meal.id);
+          if (mealItems.length === 0) return;
+
+          const sec = document.createElement('div');
+          sec.className = 'mt-3';
+          sec.innerHTML = `<h4 class="font-bold mb-2" style="color:var(--brand-primary);">${meal.label} (${toPersianDigits(mealItems.length)})</h4>`;
+
+          mealItems.forEach((entry) => {
+            const itemRow = document.createElement('div');
+            itemRow.className = 'flex-between';
+            itemRow.style.padding = '10px';
+            itemRow.style.border = '1px solid var(--border-color)';
+            itemRow.style.borderRadius = '10px';
+            itemRow.style.marginBottom = '8px';
+            itemRow.style.backgroundColor = 'var(--bg-app)';
+
+            const left = document.createElement('div');
+            const titleEl = document.createElement('div');
+            titleEl.className = 'font-bold';
+            titleEl.textContent = `${entry.foodName} (${toPersianDigits(entry.servings)} واحد)`;
+
+            const subEl = document.createElement('div');
+            subEl.className = 'text-xs text-muted';
+            subEl.textContent = `انرژی تقریبی: ${toPersianDigits(entry.calories)} کالری | پروتئین: ${toPersianDigits(entry.protein)}g | کربوهیدرات: ${toPersianDigits(entry.carbs)}g | چربی: ${toPersianDigits(entry.fat)}g`;
+
+            left.appendChild(titleEl);
+            left.appendChild(subEl);
+
+            const actions = document.createElement('div');
+            actions.className = 'flex-row';
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn btn-outline btn-sm';
+            editBtn.setAttribute('aria-label', 'ویرایش وعده');
+            editBtn.innerHTML = `${ICONS.edit} ویرایش`;
+            editBtn.onclick = () => openEditFoodLogModal(entry);
+
+            const delBtn = document.createElement('button');
+            delBtn.className = 'btn btn-danger btn-sm';
+            delBtn.setAttribute('aria-label', 'حذف وعده');
+            delBtn.innerHTML = `${ICONS.trash} حذف`;
+            delBtn.onclick = () => confirmDeleteRecord('foodLogs', entry.id, entry.foodName);
+
+            actions.appendChild(editBtn);
+            actions.appendChild(delBtn);
+
+            itemRow.appendChild(left);
+            itemRow.appendChild(actions);
+            sec.appendChild(itemRow);
+          });
+
+          mealsWrap.appendChild(sec);
+        });
+      }
+
+      // بخش جست‌وجو، فیلتر و انتخاب از بانک اطلاعاتی غذاها
+      const dbCard = document.createElement('div');
+      dbCard.className = 'card';
+      dbCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">بانک اطلاعاتی غذاها و ثبت در دفترچه</h3>
+          <span class="text-xs text-muted">تمام مقادیر تغذیه‌ای بر اساس جداول مرجع و تخمینی هستند</span>
+        </div>
+        <div class="grid-3 mb-2">
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="foodSearchInp">جست‌وجوی نام غذا</label>
+            <input id="foodSearchInp" class="form-control" type="search" placeholder="مثلاً: قورمه‌سبزی، سیب، تخم‌مرغ..." />
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label class="form-label" for="foodSortSel">مرتب‌سازی</label>
+            <select id="foodSortSel" class="form-control">
+              <option value="name">بر اساس حروف الفبا</option>
+              <option value="caloriesAsc">کم‌ترین انرژی تقریبی</option>
+              <option value="caloriesDesc">بیشترین انرژی تقریبی</option>
+              <option value="proteinDesc">بیشترین پروتئین</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;justify-content:flex-end;">
+            <button type="button" id="toggleFavFilterBtn" class="btn ${state.foodFilter.onlyFavorites ? 'btn-primary' : 'btn-outline'}">
+              ${ICONS.heart} فقط غذاهای موردعلاقه (${toPersianDigits(state.settings.favorites.length)})
+            </button>
+          </div>
+        </div>
+        <div class="tabs-bar mt-2" id="foodCatTabs"></div>
+        <div class="grid-2" id="foodDbResults"></div>
+      `;
+      container.appendChild(dbCard);
+
+      const searchInp = dbCard.querySelector('#foodSearchInp');
+      searchInp.value = state.foodFilter.search;
+      searchInp.oninput = (e) => {
+        state.foodFilter.search = e.target.value;
+        renderFoodResultsList(dbCard.querySelector('#foodDbResults'));
+      };
+
+      const sortSel = dbCard.querySelector('#foodSortSel');
+      sortSel.value = state.foodFilter.sortBy;
+      sortSel.onchange = (e) => {
+        state.foodFilter.sortBy = e.target.value;
+        renderFoodResultsList(dbCard.querySelector('#foodDbResults'));
+      };
+
+      dbCard.querySelector('#toggleFavFilterBtn').onclick = () => {
+        state.foodFilter.onlyFavorites = !state.foodFilter.onlyFavorites;
+        renderApp();
+      };
+
+      const catTabs = dbCard.querySelector('#foodCatTabs');
+      FOOD_CATEGORIES.forEach((cat) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `tab-pill ${state.foodFilter.category === cat ? 'active' : ''}`;
+        btn.textContent = cat;
+        btn.onclick = () => {
+          state.foodFilter.category = cat;
+          renderApp();
+        };
+        catTabs.appendChild(btn);
+      });
+
+      renderFoodResultsList(dbCard.querySelector('#foodDbResults'));
+    }
+
+    function renderFoodResultsList(gridEl) {
+      gridEl.innerHTML = '';
+      const q = state.foodFilter.search.trim().toLowerCase();
+      let list = FOOD_DB.filter((item) => {
+        const matchCat = state.foodFilter.category === 'همه' || item.category === state.foodFilter.category;
+        const matchQ = !q || item.name.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
+        const matchFav = !state.foodFilter.onlyFavorites || state.settings.favorites.includes(item.id);
+        return matchCat && matchQ && matchFav;
+      });
+
+      if (state.foodFilter.sortBy === 'caloriesAsc') list.sort((a, b) => a.calories - b.calories);
+      else if (state.foodFilter.sortBy === 'caloriesDesc') list.sort((a, b) => b.calories - a.calories);
+      else if (state.foodFilter.sortBy === 'proteinDesc') list.sort((a, b) => b.protein - a.protein);
+      else list.sort((a, b) => a.name.localeCompare(b.name, 'fa'));
+
+      if (list.length === 0) {
+        gridEl.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><p>غذایی با فیلترهای انتخابی شما پیدا نشد.</p></div>`;
+        return;
+      }
+
+      list.forEach((food) => {
+        const isFav = state.settings.favorites.includes(food.id);
+        const card = document.createElement('div');
+        card.className = 'food-item-card';
+        card.innerHTML = `
+          <div class="food-top">
+            <div class="food-thumb">${getFoodIllustrationSVG(food.category)}</div>
+            <div style="flex:1;min-width:0;">
+              <div class="flex-between">
+                <strong style="font-size:14px;">${escapeHTML(food.name)}</strong>
+                <button type="button" class="icon-btn fav-btn" style="width:36px;height:36px;min-width:36px;min-height:36px;color:${isFav ? 'var(--danger)' : 'var(--text-muted)'};" aria-label="افزودن به علاقه‌مندی‌ها">
+                  ${ICONS.heart}
+                </button>
+              </div>
+              <div class="text-xs text-muted">${escapeHTML(food.category)} • واحد: ${escapeHTML(food.unit)}</div>
+            </div>
+          </div>
+          <div class="macro-row">
+            <div><span class="text-muted">انرژی تخمینی</span><strong>${toPersianDigits(food.calories)} kcal</strong></div>
+            <div><span class="text-muted">پروتئین</span><strong>${toPersianDigits(food.protein)}g</strong></div>
+            <div><span class="text-muted">کربوهیدرات</span><strong>${toPersianDigits(food.carbs)}g</strong></div>
+            <div><span class="text-muted">چربی / فیبر</span><strong>${toPersianDigits(food.fat)} / ${toPersianDigits(food.fiber)}g</strong></div>
+          </div>
+          <div class="flex-between">
+            <span class="text-xs text-muted">${escapeHTML(food.source)}</span>
+            <button type="button" class="btn btn-primary btn-sm add-food-btn">${ICONS.plus} انتخاب و ثبت</button>
+          </div>
+        `;
+
+        card.querySelector('.fav-btn').onclick = () => {
+          if (isFav) {
+            state.settings.favorites = state.settings.favorites.filter((id) => id !== food.id);
+            showToast('از علاقه‌مندی‌ها حذف شد.');
+          } else {
+            state.settings.favorites.push(food.id);
+            showToast('به غذاهای موردعلاقه اضافه شد.', 'success');
+          }
+          StorageService.setSetting(LS_KEYS.favoriteFoods, state.settings.favorites);
+          renderFoodResultsList(gridEl);
+        };
+
+        card.querySelector('.add-food-btn').onclick = () => openAddFoodLogModal(food);
+
+        gridEl.appendChild(card);
+      });
+    }
+
+    function openAddFoodLogModal(food) {
+      openModal({
+        title: `ثبت «${food.name}» در دفترچه`,
+        buildBody: (body) => {
+          body.innerHTML = `
+            <p class="text-xs text-muted mb-2">واحد پایه: ${escapeHTML(food.unit)} (${escapeHTML(food.source)})</p>
+            <div class="form-group">
+              <label class="form-label" for="log_meal">انتخاب وعده غذایی *</label>
+              <select id="log_meal" class="form-control">
+                ${MEAL_TYPES.map((m) => `<option value="${m.id}">${m.label}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="log_servings">تعداد یا ضریب واحد مصرفی *</label>
+              <input id="log_servings" class="form-control" type="number" step="0.25" min="0.25" max="20" value="1" />
+            </div>
+            <div id="liveCalcPreview" class="macro-row"></div>
+          `;
+
+          const servInp = body.querySelector('#log_servings');
+          const preview = body.querySelector('#liveCalcPreview');
+          const updatePreview = () => {
+            const s = Math.max(0, Number(servInp.value) || 0);
+            preview.innerHTML = `
+              <div><span class="text-muted">انرژی</span><strong>${toPersianDigits(Math.round(food.calories * s))} kcal</strong></div>
+              <div><span class="text-muted">پروتئین</span><strong>${toPersianDigits(round1(food.protein * s))}g</strong></div>
+              <div><span class="text-muted">کربوهیدرات</span><strong>${toPersianDigits(round1(food.carbs * s))}g</strong></div>
+              <div><span class="text-muted">چربی / فیبر</span><strong>${toPersianDigits(round1(food.fat * s))} / ${toPersianDigits(round1(food.fiber * s))}g</strong></div>
+            `;
+          };
+          servInp.addEventListener('input', updatePreview);
+          updatePreview();
+        },
+        confirmText: 'ثبت در دفترچه روزانه',
+        onConfirm: async () => {
+          const mealType = document.getElementById('log_meal').value;
+          const servings = Number(document.getElementById('log_servings').value);
+          if (!servings || servings <= 0 || servings > 20) {
+            showToast('لطفاً مقدار مصرف معتبر (بین ۰.۲۵ تا ۲۰) وارد کنید.', 'danger');
+            return false;
+          }
+          const entry = {
+            id: generateId('fd'),
+            date: state.selectedDate,
+            foodId: food.id,
+            foodName: food.name,
+            mealType,
+            servings,
+            calories: Math.round(food.calories * servings),
+            protein: round1(food.protein * servings),
+            carbs: round1(food.carbs * servings),
+            fat: round1(food.fat * servings),
+            fiber: round1(food.fiber * servings),
+            createdAt: Date.now()
+          };
+          await StorageService.putItem('foodLogs', entry);
+          state.foodLogs.push(entry);
+          showToast('غذا در دفترچه روزانه ثبت شد.', 'success');
+          renderApp();
+        }
+      });
+    }
+
+    function openEditFoodLogModal(entry) {
+      const baseFood = FOOD_DB.find((f) => f.id === entry.foodId);
+      const unitCal = baseFood ? baseFood.calories : entry.calories / (entry.servings || 1);
+      const unitPro = baseFood ? baseFood.protein : entry.protein / (entry.servings || 1);
+      const unitCarb = baseFood ? baseFood.carbs : entry.carbs / (entry.servings || 1);
+      const unitFat = baseFood ? baseFood.fat : entry.fat / (entry.servings || 1);
+      const unitFib = baseFood ? baseFood.fiber : entry.fiber / (entry.servings || 1);
+
+      openModal({
+        title: `ویرایش «${entry.foodName}»`,
+        buildBody: (body) => {
+          body.innerHTML = `
+            <div class="form-group">
+              <label class="form-label" for="edit_meal">وعده غذایی</label>
+              <select id="edit_meal" class="form-control">
+                ${MEAL_TYPES.map((m) => `<option value="${m.id}" ${m.id === entry.mealType ? 'selected' : ''}>${m.label}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="edit_servings">مقدار واحد مصرفی</label>
+              <input id="edit_servings" class="form-control" type="number" step="0.25" min="0.25" max="20" value="${entry.servings}" />
+            </div>
+          `;
+        },
+        confirmText: 'ذخیره تغییرات',
+        onConfirm: async () => {
+          const mealType = document.getElementById('edit_meal').value;
+          const servings = Number(document.getElementById('edit_servings').value);
+          if (!servings || servings <= 0 || servings > 20) {
+            showToast('مقدار واحد مصرفی معتبر نیست.', 'danger');
+            return false;
+          }
+          const updated = {
+            ...entry,
+            mealType,
+            servings,
+            calories: Math.round(unitCal * servings),
+            protein: round1(unitPro * servings),
+            carbs: round1(unitCarb * servings),
+            fat: round1(unitFat * servings),
+            fiber: round1(unitFib * servings)
+          };
+          await StorageService.putItem('foodLogs', updated);
+          state.foodLogs = state.foodLogs.map((f) => (f.id === entry.id ? updated : f));
+          showToast('تغییرات با موفقیت ذخیره شد.', 'success');
+          renderApp();
+        }
+      });
+    }
+
+    /* =========================================================================
+       ۱۳. صفحه مدیریت آب مصرفی (Water Tracker)
+       ========================================================================= */
+    async function quickLogWater(amountMl, customDate = null) {
+      const targetDate = customDate || getTodayISO();
+      const amount = Number(amountMl);
+      if (!amount || amount < 50 || amount > 3000) {
+        showToast('مقدار آب باید بین ۵۰ تا ۳۰۰۰ میلی‌لیتر باشد.', 'danger');
+        return;
+      }
+      const entry = {
+        id: generateId('wt_log'),
+        date: targetDate,
+        amountMl: amount,
+        time: new Date().toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit' }),
+        createdAt: Date.now()
+      };
+      try {
+        await StorageService.putItem('waterLogs', entry);
+        state.waterLogs.push(entry);
+        showToast(`${toPersianDigits(amount)} میلی‌لیتر آب ثبت شد.`, 'success');
+        renderApp();
+      } catch (e) {
+        showToast('خطا در ثبت آب مصرفی.', 'danger');
+      }
+    }
+
+    function renderWaterPage(container) {
+      const today = getTodayISO();
+      const daily = getDailySummary(today);
+      const metrics = evaluateHealthMetrics(state.profile);
+      const goalMl = metrics.suggestedWaterMl;
+      const pct = Math.min(100, Math.round((daily.totalWaterMl / goalMl) * 100));
+      const glassesCount = round1(daily.totalWaterMl / 250);
+
+      // کارت وضعیت آب امروز و دکمه‌های سریع
+      const mainCard = document.createElement('div');
+      mainCard.className = 'card';
+      mainCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.water} پایش آب مصرفی امروز</h3>
+          <span class="badge">${toPersianDigits(pct)}٪ تکمیل شده</span>
+        </div>
+        <div class="grid-2" style="align-items:center;">
+          <div>
+            <div class="stat-value" style="font-size:26px;">
+              ${toPersianDigits(daily.totalWaterMl)} <span class="text-sm">میلی‌لیتر</span>
+            </div>
+            <p class="text-sm text-muted">معادل حدود ${toPersianDigits(glassesCount)} لیوان ۲۵۰ میلی‌لیتری • برآورد روزانه شما: ${toPersianDigits(goalMl)} میلی‌لیتر</p>
+            <div class="progress-track" style="height:14px;"><div class="progress-fill" style="width:${pct}%"></div></div>
+          </div>
+          <div>
+            <div class="flex-row mb-2">
+              <button type="button" id="addGlass250" class="btn btn-primary">${ICONS.plus} یک لیوان (۲۵۰ ml)</button>
+              <button type="button" id="addBottle500" class="btn btn-soft">${ICONS.plus} یک بطری (۵۰۰ ml)</button>
+            </div>
+            <form id="customWaterForm" class="flex-row">
+              <label for="customWaterInp" class="hidden">مقدار دلخواه آب (میلی‌لیتر)</label>
+              <input id="customWaterInp" class="form-control" style="max-width:160px;" type="number" min="50" max="2000" step="10" placeholder="مقدار دلخواه (ml)" required />
+              <button type="submit" class="btn btn-gold">ثبت مقدار</button>
+            </form>
+          </div>
+        </div>
+      `;
+      container.appendChild(mainCard);
+
+      mainCard.querySelector('#addGlass250').onclick = () => quickLogWater(250, today);
+      mainCard.querySelector('#addBottle500').onclick = () => quickLogWater(500, today);
+      mainCard.querySelector('#customWaterForm').onsubmit = (e) => {
+        e.preventDefault();
+        const val = Number(mainCard.querySelector('#customWaterInp').value);
+        quickLogWater(val, today);
+      };
+
+      // نمودار ۷ روز گذشته آب
+      const chartCard = document.createElement('div');
+      chartCard.className = 'card';
+      chartCard.innerHTML = `<div class="card-header"><h3 class="card-title">${ICONS.reports} روند مصرف آب در ۷ روز گذشته</h3></div><div class="chart-box" id="water7Chart"></div>`;
+      container.appendChild(chartCard);
+
+      const last7 = [];
+      for (let i = 6; i >= 0; i--) {
+        const dISO = shiftDateISO(today, -i);
+        const sumMl = state.waterLogs.filter((w) => w.date === dISO).reduce((s, x) => s + Number(x.amountMl), 0);
+        const dt = new Date(dISO);
+        const dayName = new Intl.DateTimeFormat('fa-IR', { weekday: 'short' }).format(dt);
+        last7.push({ label: dayName, value: sumMl });
+      }
+      chartCard.querySelector('#water7Chart').appendChild(createBarChartSVG(last7, 'میلی‌لیتر آب', '#701C3C'));
+
+      // لیست ثبت‌های امروز (امکان ویرایش و حذف) + یادآور آب
+      const bottomGrid = document.createElement('div');
+      bottomGrid.className = 'grid-2';
+
+      const logsCard = document.createElement('div');
+      logsCard.className = 'card';
+      logsCard.innerHTML = `<div class="card-header"><h3 class="card-title">ثبت‌های آب امروز (${toPersianDigits(daily.waters.length)})</h3></div><div id="todayWaterList"></div>`;
+      bottomGrid.appendChild(logsCard);
+
+      const wList = logsCard.querySelector('#todayWaterList');
+      if (daily.waters.length === 0) {
+        wList.innerHTML = `<div class="empty-state"><p>امروز هنوز آبی ثبت نکرده‌اید.</p></div>`;
+      } else {
+        daily.waters.slice().reverse().forEach((w) => {
+          const row = document.createElement('div');
+          row.className = 'flex-between';
+          row.style.padding = '8px 0';
+          row.style.borderBottom = '1px solid var(--border-color)';
+
+          const lbl = document.createElement('span');
+          lbl.textContent = `${toPersianDigits(w.amountMl)} میلی‌لیتر ${w.time ? `(${w.time})` : ''}`;
+
+          const btns = document.createElement('div');
+          btns.className = 'flex-row';
+
+          const editBtn = document.createElement('button');
+          editBtn.className = 'btn btn-outline btn-sm';
+          editBtn.setAttribute('aria-label', 'ویرایش مقدار آب');
+          editBtn.innerHTML = ICONS.edit;
+          editBtn.onclick = () => {
+            openModal({
+              title: 'اصلاح مقدار آب ثبت‌شده',
+              buildBody: (b) => {
+                b.innerHTML = `<div class="form-group"><label class="form-label" for="editWaterVal">مقدار جدید (میلی‌لیتر)</label><input id="editWaterVal" class="form-control" type="number" min="50" max="2000" value="${w.amountMl}" /></div>`;
+              },
+              confirmText: 'ذخیره',
+              onConfirm: async () => {
+                const newVal = Number(document.getElementById('editWaterVal').value);
+                if (!newVal || newVal < 50 || newVal > 2000) {
+                  showToast('مقدار معتبر نیست.', 'danger');
+                  return false;
+                }
+                const updated = { ...w, amountMl: newVal };
+                await StorageService.putItem('waterLogs', updated);
+                state.waterLogs = state.waterLogs.map((x) => (x.id === w.id ? updated : x));
+                showToast('مقدار آب اصلاح شد.', 'success');
+                renderApp();
+              }
+            });
+          };
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'btn btn-danger btn-sm';
+          delBtn.setAttribute('aria-label', 'حذف ثبت آب');
+          delBtn.innerHTML = ICONS.trash;
+          delBtn.onclick = () => confirmDeleteRecord('waterLogs', w.id, `${toPersianDigits(w.amountMl)} میلی‌لیتر آب`);
+
+          btns.appendChild(editBtn);
+          btns.appendChild(delBtn);
+          row.appendChild(lbl);
+          row.appendChild(btns);
+          wList.appendChild(row);
+        });
+      }
+
+      // کارت یادآوری نوشیدن آب
+      const remCard = document.createElement('div');
+      remCard.className = 'card';
+      const rem = state.settings.waterReminder;
+      remCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.bell} یادآور هوشمند نوشیدن آب</h3>
+          <span class="badge ${rem.enabled ? '' : 'badge-gold'}">${rem.enabled ? 'فعال' : 'غیرفعال'}</span>
+        </div>
+        <p class="text-sm text-muted mb-2">با فعال‌سازی یادآور، در زمان باز بودن برنامه هر چند دقیقه یک‌بار پیام یادآوری نمایش داده می‌شود.</p>
+        <div class="form-group">
+          <label class="form-label" for="remIntervalSel">فاصله زمانی یادآوری</label>
+          <select id="remIntervalSel" class="form-control">
+            <option value="60" ${Number(rem.intervalMin) === 60 ? 'selected' : ''}>هر ۱ ساعت</option>
+            <option value="90" ${Number(rem.intervalMin) === 90 ? 'selected' : ''}>هر ۱.۵ ساعت</option>
+            <option value="120" ${Number(rem.intervalMin) === 120 ? 'selected' : ''}>هر ۲ ساعت</option>
+            <option value="180" ${Number(rem.intervalMin) === 180 ? 'selected' : ''}>هر ۳ ساعت</option>
+          </select>
+        </div>
+        <button type="button" id="toggleRemBtn" class="btn ${rem.enabled ? 'btn-outline' : 'btn-primary'}" style="width:100%;">
+          ${rem.enabled ? 'غیرفعال کردن یادآور' : 'فعال کردن یادآور آب'}
+        </button>
+      `;
+      bottomGrid.appendChild(remCard);
+      container.appendChild(bottomGrid);
+
+      remCard.querySelector('#toggleRemBtn').onclick = () => {
+        const intervalMin = Number(remCard.querySelector('#remIntervalSel').value);
+        state.settings.waterReminder = {
+          enabled: !rem.enabled,
+          intervalMin
+        };
+        StorageService.setSetting(LS_KEYS.waterReminder, state.settings.waterReminder);
+        setupWaterReminderTimer();
+        showToast(state.settings.waterReminder.enabled ? 'یادآور آب فعال شد.' : 'یادآور آب غیرفعال شد.', 'success');
+        renderApp();
+      };
+    }
+
+    /* =========================================================================
+       ۱۴. صفحه پیشنهادهای غذایی هوشمند (Smart Suggestions)
+       ========================================================================= */
+    function renderSuggestionsPage(container) {
+      const headerCard = document.createElement('div');
+      headerCard.className = 'card';
+      headerCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.sparkle} پیشنهادهای غذایی هوشمند تندرسا</h3>
+          <span class="badge">متعادل و غیرمحدودکننده</span>
+        </div>
+        <p class="text-sm text-muted">
+          این پیشنهادها بر پایه تنوع گروه‌های غذایی، فیبر مناسب و تعادل انرژی طراحی شده‌اند و شامل رژیم‌های سخت‌گیرانه نیستند.
+        </p>
+        ${state.profile.allergies ? `<div class="alert-box alert-warning mt-2"><span>${ICONS.info}</span><div>با توجه به ثبت شرایط/حساسیت غذایی در پروفایل شما، لطفاً قبل از انتخاب مواد اولیه، سازگاری آن‌ها را بررسی کرده و برای برنامه اختصاصی با متخصص تغذیه مشورت کنید.</div></div>` : ''}
+        <div class="tabs-bar mt-3" id="sugFilterTabs"></div>
+      `;
+      container.appendChild(headerCard);
+
+      const tabs = ['همه', 'صبحانه', 'ناهار', 'شام', 'میان‌وعده'];
+      const tabBar = headerCard.querySelector('#sugFilterTabs');
+      tabs.forEach((t) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `tab-pill ${state.suggestionMealFilter === t ? 'active' : ''}`;
+        btn.textContent = t;
+        btn.onclick = () => {
+          state.suggestionMealFilter = t;
+          renderApp();
+        };
+        tabBar.appendChild(btn);
+      });
+
+      const filtered = SMART_SUGGESTIONS.filter(
+        (s) => state.suggestionMealFilter === 'همه' || s.meal === state.suggestionMealFilter
+      );
+
+      const grid = document.createElement('div');
+      grid.className = 'grid-2';
+
+      filtered.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.marginBottom = '0';
+
+        const tagsHTML = item.tags.map((tg) => `<span class="badge badge-gold">${tg}</span>`).join(' ');
+        const ingHTML = item.ingredients.map((ing) => `<li>${escapeHTML(ing)}</li>`).join('');
+
+        card.innerHTML = `
+          <div class="flex-between mb-2">
+            <span class="badge">${item.meal}</span>
+            <div class="flex-row">${tagsHTML}</div>
+          </div>
+          <h4 class="font-bold mb-2" style="font-size:15px;">${escapeHTML(item.title)}</h4>
+          <div class="text-sm mb-2">
+            <strong>مواد اولیه پیشنهادی:</strong>
+            <ul style="padding-right:18px;margin-top:4px;color:var(--text-muted);">${ingHTML}</ul>
+          </div>
+          <div class="text-sm mb-2">
+            <strong>روش آماده‌سازی:</strong>
+            <p class="text-muted">${escapeHTML(item.prep)}</p>
+          </div>
+          <div class="alert-box alert-info" style="margin-bottom:0;padding:8px 10px;font-size:12px;">
+            <div><strong>جایگزین غذایی:</strong> ${escapeHTML(item.swap)}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      container.appendChild(grid);
+    }
+
+    /* =========================================================================
+       ۱۵. صفحه گزارش‌های آماری (Reports - متصل به داده‌های واقعی کاربر)
+       ========================================================================= */
+    function renderReportsPage(container) {
+      const today = getTodayISO();
+      const metrics = evaluateHealthMetrics(state.profile);
+      const daysCount = state.reportDays;
+
+      const topCard = document.createElement('div');
+      topCard.className = 'card flex-between';
+      topCard.innerHTML = `
+        <div>
+          <h3 class="card-title">${ICONS.reports} گزارش‌های تحلیلی و روند سلامتی</h3>
+          <p class="text-xs text-muted">تمام نمودارها مستقیماً از داده‌های واقعی ثبت‌شده شما تولید می‌شوند.</p>
+        </div>
+        <div class="flex-row">
+          <button type="button" id="rep7Btn" class="btn btn-sm ${daysCount === 7 ? 'btn-primary' : 'btn-outline'}">۷ روز گذشته</button>
+          <button type="button" id="rep14Btn" class="btn btn-sm ${daysCount === 14 ? 'btn-primary' : 'btn-outline'}">۱۴ روز گذشته</button>
+        </div>
+      `;
+      container.appendChild(topCard);
+
+      topCard.querySelector('#rep7Btn').onclick = () => { state.reportDays = 7; renderApp(); };
+      topCard.querySelector('#rep14Btn').onclick = () => { state.reportDays = 14; renderApp(); };
+
+      // آماده‌سازی سری‌های زمانی واقعی
+      const dates = [];
+      for (let i = daysCount - 1; i >= 0; i--) {
+        dates.push(shiftDateISO(today, -i));
+      }
+
+      const waterSeries = [];
+      const energySeries = [];
+      const mealsCountSeries = [];
+      const activitySeries = [];
+
+      dates.forEach((dISO) => {
+        const s = getDailySummary(dISO);
+        const dt = new Date(dISO);
+        const lbl = new Intl.DateTimeFormat('fa-IR', { month: 'numeric', day: 'numeric' }).format(dt);
+        waterSeries.push({ label: lbl, value: s.totalWaterMl, fullDate: dISO });
+        energySeries.push({ label: lbl, value: s.nutrition.calories, fullDate: dISO });
+        mealsCountSeries.push({ label: lbl, value: s.foods.length, fullDate: dISO });
+        activitySeries.push({ label: lbl, value: s.totalActivityMin, fullDate: dISO });
+      });
+
+      const hasAnyData =
+        waterSeries.some((x) => x.value > 0) ||
+        energySeries.some((x) => x.value > 0) ||
+        activitySeries.some((x) => x.value > 0);
+
+      if (!hasAnyData) {
+        const empty = document.createElement('div');
+        empty.className = 'card empty-state';
+        empty.innerHTML = `
+          <h4 class="font-bold">هنوز داده‌ای در این بازه زمانی ثبت نشده است</h4>
+          <p>با ثبت اولین وعده غذایی، لیوان آب یا فعالیت بدنی، نمودارهای واقعی شما در این بخش ترسیم می‌شوند.</p>
+          <button type="button" id="goFoodFromRep" class="btn btn-primary">شروع ثبت اطلاعات امروز</button>
+        `;
+        container.appendChild(empty);
+        empty.querySelector('#goFoodFromRep').onclick = () => navigateTo('food');
+        return;
+      }
+
+      const chartsGrid = document.createElement('div');
+      chartsGrid.className = 'grid-2';
+
+      // ۱. نمودار آب مصرفی
+      const c1 = document.createElement('div');
+      c1.className = 'card';
+      c1.innerHTML = `<h4 class="card-title mb-2">${ICONS.water} ۱. آب مصرفی روزانه (میلی‌لیتر)</h4><div class="chart-box"></div>`;
+      c1.querySelector('.chart-box').appendChild(createBarChartSVG(waterSeries, 'آب مصرفی', '#701C3C'));
+      chartsGrid.appendChild(c1);
+
+      // ۲. نمودار انرژی (فقط برای بزرگسالان) یا تنوع وعده (برای زیر ۱۸ سال)
+      const c2 = document.createElement('div');
+      c2.className = 'card';
+      if (!metrics.isMinor) {
+        c2.innerHTML = `<h4 class="card-title mb-2">${ICONS.food} ۲. انرژی ثبت‌شده روزانه (کالری تخمینی)</h4><div class="chart-box"></div>`;
+        c2.querySelector('.chart-box').appendChild(createBarChartSVG(energySeries, 'انرژی روزانه', '#B68D40'));
+      } else {
+        c2.innerHTML = `<h4 class="card-title mb-2">${ICONS.sparkle} ۲. تعداد اقلام غذایی ثبت‌شده (نوجوانان)</h4><div class="chart-box"></div>`;
+        c2.querySelector('.chart-box').appendChild(createBarChartSVG(mealsCountSeries, 'تعداد اقلام', '#B68D40'));
+      }
+      chartsGrid.appendChild(c2);
+
+      // ۳. نمودار تعداد وعده‌ها
+      const c3 = document.createElement('div');
+      c3.className = 'card';
+      c3.innerHTML = `<h4 class="card-title mb-2">${ICONS.calendar} ۳. تعداد وعده‌ها و میان‌وعده‌های ثبت‌شده</h4><div class="chart-box"></div>`;
+      c3.querySelector('.chart-box').appendChild(createBarChartSVG(mealsCountSeries, 'تعداد وعده', '#701C3C'));
+      chartsGrid.appendChild(c3);
+
+      // ۴. نمودار فعالیت بدنی
+      const c4 = document.createElement('div');
+      c4.className = 'card';
+      c4.innerHTML = `<h4 class="card-title mb-2">${ICONS.activity} ۴. فعالیت بدنی روزانه (دقیقه)</h4><div class="chart-box"></div>`;
+      c4.querySelector('.chart-box').appendChild(createBarChartSVG(activitySeries, 'دقیقه فعالیت', '#1E7E53'));
+      chartsGrid.appendChild(c4);
+
+      container.appendChild(chartsGrid);
+
+      // ۵. روند شاخص‌های سلامتی و ثبت وزن اختیاری بزرگسالان
+      if (!metrics.isMinor) {
+        const weightCard = document.createElement('div');
+        weightCard.className = 'card';
+        weightCard.innerHTML = `
+          <div class="card-header">
+            <h4 class="card-title">${ICONS.heart} ۵. روند وزن ثبت‌شده (اختیاری - ویژه بزرگسالان)</h4>
+            <button type="button" id="addWeightLogBtn" class="btn btn-soft btn-sm">${ICONS.plus} ثبت وزن جدید</button>
+          </div>
+          <div id="weightLogsList"></div>
+        `;
+        container.appendChild(weightCard);
+
+        weightCard.querySelector('#addWeightLogBtn').onclick = () => {
+          openModal({
+            title: 'ثبت وزن جدید',
+            buildBody: (b) => {
+              b.innerHTML = `
+                <div class="form-group">
+                  <label class="form-label" for="newWtInp">وزن فعلی (کیلوگرم)</label>
+                  <input id="newWtInp" class="form-control" type="number" step="0.1" min="25" max="300" value="${state.profile.weight}" />
+                </div>
+              `;
+            },
+            confirmText: 'ثبت وزن',
+            onConfirm: async () => {
+              const wt = Number(document.getElementById('newWtInp').value);
+              if (!wt || wt < 25 || wt > 300) {
+                showToast('مقدار وزن معتبر نیست.', 'danger');
+                return false;
+              }
+              const log = { id: generateId('wt'), date: getTodayISO(), weight: wt, createdAt: Date.now() };
+              await StorageService.putItem('weightLogs', log);
+              state.weightLogs.push(log);
+              state.profile.weight = wt;
+              await StorageService.saveProfile(state.profile);
+              showToast('وزن جدید ثبت شد.', 'success');
+              renderApp();
+            }
+          });
+        };
+
+        const wListEl = weightCard.querySelector('#weightLogsList');
+        if (state.weightLogs.length === 0) {
+          wListEl.innerHTML = `<p class="text-sm text-muted">هنوز سابقه تغییر وزن ثبت نشده است.</p>`;
+        } else {
+          const wtPoints = state.weightLogs.slice(-7).map((w) => ({
+            label: new Intl.DateTimeFormat('fa-IR', { month: 'numeric', day: 'numeric' }).format(new Date(w.date)),
+            value: w.weight
+          }));
+          wListEl.appendChild(createBarChartSVG(wtPoints, 'کیلوگرم', '#701C3C'));
+        }
+      }
+    }
+
+    /* =========================================================================
+       ۱۶. صفحه تقویم تاریخچه (History Calendar & Past Editing)
+       ========================================================================= */
+    function renderHistoryPage(container) {
+      const baseDate = new Date();
+      baseDate.setMonth(baseDate.getMonth() + state.calendarMonthOffset);
+      const year = baseDate.getFullYear();
+      const month = baseDate.getMonth();
+
+      const monthTitle = new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long' }).format(baseDate);
+
+      const calCard = document.createElement('div');
+      calCard.className = 'card';
+      calCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.calendar} تقویم تاریخچه و سوابق روزانه</h3>
+          <div class="flex-row">
+            <button type="button" id="prevMonthBtn" class="btn btn-outline btn-sm">ماه قبل</button>
+            <span class="font-bold">${monthTitle}</span>
+            <button type="button" id="nextMonthBtn" class="btn btn-outline btn-sm">ماه بعد</button>
+          </div>
+        </div>
+        <p class="text-xs text-muted mb-2">روی هر روز کلیک کنید تا غذاها، آب مصرفی و فعالیت بدنی آن روز را ببینید یا ویرایش کنید. نقاط طلایی نشان‌دهنده روزهای دارای ثبت اطلاعات هستند.</p>
+        <div class="calendar-grid" id="calGrid"></div>
+      `;
+      container.appendChild(calCard);
+
+      calCard.querySelector('#prevMonthBtn').onclick = () => { state.calendarMonthOffset -= 1; renderApp(); };
+      calCard.querySelector('#nextMonthBtn').onclick = () => { state.calendarMonthOffset += 1; renderApp(); };
+
+      const grid = calCard.querySelector('#calGrid');
+      const weekHeaders = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+      weekHeaders.forEach((wh) => {
+        const h = document.createElement('div');
+        h.className = 'cal-day-header';
+        h.textContent = wh;
+        grid.appendChild(h);
+      });
+
+      const firstDay = new Date(year, month, 1);
+      // تبدیل روز هفته میلادی به شنبه=0
+      const startPad = (firstDay.getDay() + 1) % 7;
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < startPad; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'cal-cell empty';
+        grid.appendChild(empty);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const hasFood = state.foodLogs.some((f) => f.date === iso);
+        const hasWater = state.waterLogs.some((w) => w.date === iso);
+        const hasAct = state.activityLogs.some((a) => a.date === iso);
+
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = `cal-cell ${state.selectedDate === iso ? 'selected' : ''} ${(hasFood || hasWater || hasAct) ? 'has-data' : ''}`;
+        cell.textContent = toPersianDigits(d);
+        cell.setAttribute('aria-label', formatPersianDate(iso));
+        cell.onclick = () => {
+          state.selectedDate = iso;
+          renderApp();
+        };
+        grid.appendChild(cell);
+      }
+
+      // جزئیات روز انتخاب‌شده و امکان ویرایش
+      const selSummary = getDailySummary(state.selectedDate);
+      const detailCard = document.createElement('div');
+      detailCard.className = 'card';
+      detailCard.innerHTML = `
+        <div class="card-header">
+          <h4 class="card-title">جزئیات ${formatPersianDate(state.selectedDate)}</h4>
+          <div class="flex-row">
+            <button type="button" id="editDayFoodBtn" class="btn btn-primary btn-sm">${ICONS.edit} افزودن/ویرایش غذا</button>
+            <button type="button" id="addDayWaterBtn" class="btn btn-soft btn-sm">${ICONS.plus} ثبت ۲۵۰ml آب</button>
+            <button type="button" id="addDayActBtn" class="btn btn-outline btn-sm">${ICONS.plus} ثبت فعالیت</button>
+          </div>
+        </div>
+        <div class="grid-3 mb-3">
+          <div class="stat-card"><span class="stat-label">انرژی تخمینی</span><span class="stat-value">${toPersianDigits(selSummary.nutrition.calories)} kcal</span></div>
+          <div class="stat-card"><span class="stat-label">آب مصرفی</span><span class="stat-value">${toPersianDigits(selSummary.totalWaterMl)} ml</span></div>
+          <div class="stat-card"><span class="stat-label">فعالیت بدنی</span><span class="stat-value">${toPersianDigits(selSummary.totalActivityMin)} دقیقه</span></div>
+        </div>
+        <div id="histFoodsList"></div>
+      `;
+      container.appendChild(detailCard);
+
+      detailCard.querySelector('#editDayFoodBtn').onclick = () => navigateTo('food');
+      detailCard.querySelector('#addDayWaterBtn').onclick = () => quickLogWater(250, state.selectedDate);
+      detailCard.querySelector('#addDayActBtn').onclick = () => openActivityModal(state.selectedDate);
+
+      const hf = detailCard.querySelector('#histFoodsList');
+      if (selSummary.foods.length === 0) {
+        hf.innerHTML = `<p class="text-sm text-muted">در این تاریخ وعده غذایی ثبت نشده است.</p>`;
+      } else {
+        selSummary.foods.forEach((item) => {
+          const row = document.createElement('div');
+          row.className = 'flex-between';
+          row.style.padding = '8px 0';
+          row.style.borderBottom = '1px solid var(--border-color)';
+
+          const txt = document.createElement('span');
+          txt.className = 'text-sm';
+          txt.textContent = `${item.foodName} (${toPersianDigits(item.servings)} واحد) — ${toPersianDigits(item.calories)} کالری`;
+
+          const del = document.createElement('button');
+          del.className = 'btn btn-danger btn-sm';
+          del.innerHTML = ICONS.trash;
+          del.setAttribute('aria-label', 'حذف مورد');
+          del.onclick = () => confirmDeleteRecord('foodLogs', item.id, item.foodName);
+
+          row.appendChild(txt);
+          row.appendChild(del);
+          hf.appendChild(row);
+        });
+      }
+    }
+
+    /* =========================================================================
+       ۱۷. صفحه پروفایل و تنظیمات کامل (Profile & Settings)
+       ========================================================================= */
+    function renderProfileAndSettingsPage(container) {
+      // بخش اول: ویرایش پروفایل کاربری
+      const profileCard = document.createElement('div');
+      profileCard.className = 'card';
+      profileCard.innerHTML = `<div class="card-header"><h3 class="card-title">${ICONS.profile} پروفایل کاربری تندرسا</h3></div>`;
+
+      const form = buildProfileForm(state.profile, async (updatedProfile) => {
+        try {
+          await StorageService.saveProfile(updatedProfile);
+          state.profile = updatedProfile;
+          showToast('اطلاعات پروفایل با موفقیت به‌روزرسانی شد.', 'success');
+          renderApp();
+        } catch (e) {
+          showToast('خطا در ذخیره پروفایل.', 'danger');
+        }
+      });
+      profileCard.appendChild(form);
+      container.appendChild(profileCard);
+
+      // بخش دوم: تنظیمات اپلیکیشن، پشتیبان‌گیری JSON و بازنشانی
+      const settingsCard = document.createElement('div');
+      settingsCard.className = 'card';
+      settingsCard.innerHTML = `
+        <div class="card-header">
+          <h3 class="card-title">${ICONS.settings} تنظیمات، پشتیبان‌گیری و درباره تندرسا</h3>
+          <span class="badge">نسخه ۱.۰.۰ پیش‌نمایش</span>
+        </div>
+
+        <div class="grid-2 mb-3">
+          <div class="form-group">
+            <label class="form-label" for="setThemeSel">ظاهر برنامه (تم روشن / تاریک)</label>
+            <select id="setThemeSel" class="form-control">
+              <option value="light" ${state.settings.theme === 'light' ? 'selected' : ''}>حالت روشن (پالت کرم و زرشکی)</option>
+              <option value="dark" ${state.settings.theme === 'dark' ? 'selected' : ''}>حالت تاریک (Dark Mode)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="setUnitSel">واحد نمایش آب مصرفی</label>
+            <select id="setUnitSel" class="form-control">
+              <option value="metric" ${state.settings.unitSystem === 'metric' ? 'selected' : ''}>میلی‌لیتر (ml)</option>
+              <option value="glass" ${state.settings.unitSystem === 'glass' ? 'selected' : ''}>لیوان استاندارد (۲۵۰ میلی‌لیتر)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-3" style="padding:12px;border:1px solid var(--border-color);border-radius:12px;">
+          <h4 class="font-bold mb-2">پشتیبان‌گیری و بازیابی اطلاعات (JSON)</h4>
+          <p class="text-xs text-muted mb-2">تمام داده‌های شما فقط روی دستگاه خودتان نگهداری می‌شود. می‌توانید یک فایل پشتیبان JSON دانلود کنید یا فایل قبلی را بازیابی نمایید.</p>
+          <div class="flex-row">
+            <button type="button" id="exportJsonBtn" class="btn btn-soft">خروجی گرفتن از اطلاعات (Export JSON)</button>
+            <label class="btn btn-outline" style="cursor:pointer;">
+              بازیابی اطلاعات (Import JSON)
+              <input type="file" id="importJsonInput" accept=".json,application/json" class="hidden" />
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-3" style="padding:12px;border:1px solid var(--danger);border-radius:12px;background:var(--danger-bg);">
+          <h4 class="font-bold" style="color:var(--danger);">حذف کامل اطلاعات محلی</h4>
+          <p class="text-xs mb-2">با اجرای این گزینه، پروفایل و تمام سوابق ثبت‌شده غذا، آب و فعالیت از این مرورگر پاک می‌شوند.</p>
+          <button type="button" id="wipeAllDataBtn" class="btn btn-danger btn-sm">${ICONS.trash} حذف کامل اطلاعات و بازنشانی</button>
+        </div>
+
+        <div style="padding-top:12px;border-top:1px solid var(--border-color);">
+          <div class="flex-row mb-2">
+            ${ICONS.logo}
+            <div>
+              <strong>تندرسا | TANDERSA</strong>
+              <div class="text-xs text-muted">«هر روز، یک قدم به سوی زندگی سالم‌تر» — طراحی‌شده با معماری Local-First و بدون ارسال داده به سرور</div>
+            </div>
+          </div>
+        </div>
+      `;
+      container.appendChild(settingsCard);
+
+      settingsCard.querySelector('#setThemeSel').onchange = (e) => {
+        applyTheme(e.target.value);
+        showToast('تم برنامه تغییر کرد.');
+      };
+
+      settingsCard.querySelector('#setUnitSel').onchange = (e) => {
+        state.settings.unitSystem = e.target.value;
+        StorageService.setSetting(LS_KEYS.unitSystem, e.target.value);
+        showToast('واحد اندازه‌گیری ذخیره شد.', 'success');
+      };
+
+      // خروجی JSON
+      settingsCard.querySelector('#exportJsonBtn').onclick = () => {
+        try {
+          const payload = {
+            app: 'TANDERSA',
+            version: '1.0.0',
+            exportedAt: new Date().toISOString(),
+            profile: state.profile,
+            foodLogs: state.foodLogs,
+            waterLogs: state.waterLogs,
+            activityLogs: state.activityLogs,
+            weightLogs: state.weightLogs
+          };
+          const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `tandersa-backup-${getTodayISO()}.json`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          showToast('فایل پشتیبان JSON آماده و دانلود شد.', 'success');
+        } catch (err) {
+          showToast('خطا در تهیه خروجی JSON.', 'danger');
+        }
+      };
+
+      // بازیابی JSON با اعتبارسنجی
+      settingsCard.querySelector('#importJsonInput').onchange = (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+          try {
+            const parsed = JSON.parse(ev.target.result);
+            if (!parsed || parsed.app !== 'TANDERSA' || !parsed.profile) {
+              throw new Error('ساختار فایل پشتیبان متعلق به تندرسا نیست.');
+            }
+            await StorageService.clearAllStores();
+            await StorageService.saveProfile(parsed.profile);
+            if (Array.isArray(parsed.foodLogs)) {
+              for (const item of parsed.foodLogs) await StorageService.putItem('foodLogs', item);
+            }
+            if (Array.isArray(parsed.waterLogs)) {
+              for (const item of parsed.waterLogs) await StorageService.putItem('waterLogs', item);
+            }
+            if (Array.isArray(parsed.activityLogs)) {
+              for (const item of parsed.activityLogs) await StorageService.putItem('activityLogs', item);
+            }
+            if (Array.isArray(parsed.weightLogs)) {
+              for (const item of parsed.weightLogs) await StorageService.putItem('weightLogs', item);
+            }
+            await loadAllDataFromDB();
+            showToast('اطلاعات پشتیبان با موفقیت بازیابی شد.', 'success');
+            renderApp();
+          } catch (err) {
+            showToast('خطا در خواندن یا اعتبارسنجی فایل JSON.', 'danger');
+          }
+        };
+        reader.readAsText(file);
+      };
+
+      // حذف کامل اطلاعات با تأیید کاربر
+      settingsCard.querySelector('#wipeAllDataBtn').onclick = () => {
+        openModal({
+          title: 'تأیید حذف کامل اطلاعات محلی',
+          buildBody: (b) => {
+            const p = document.createElement('p');
+            p.textContent = 'آیا مطمئن هستید که می‌خواهید تمام اطلاعات پروفایل، غذاها، آب و گزارش‌های ذخیره‌شده در این دستگاه را برای همیشه حذف کنید؟ این عملیات قابل بازگشت نیست.';
+            b.appendChild(p);
+          },
+          confirmText: 'بله، همه اطلاعات حذف شوند',
+          confirmClass: 'btn-danger',
+          onConfirm: async () => {
+            try {
+              await StorageService.clearAllStores();
+              localStorage.removeItem(LS_KEYS.favoriteFoods);
+              state.profile = null;
+              state.foodLogs = [];
+              state.waterLogs = [];
+              state.activityLogs = [];
+              state.weightLogs = [];
+              state.settings.favorites = [];
+              showToast('تمام اطلاعات محلی پاک شد.');
+              renderApp();
+            } catch (e) {
+              showToast('خطا در حذف اطلاعات.', 'danger');
+            }
+          }
+        });
+      };
+    }
+
+    /* =========================================================================
+       ۱۸. تأییدیه حذف رکوردهای تکی و توابع ناوبری
+       ========================================================================= */
+    function confirmDeleteRecord(storeName, id, label) {
+      openModal({
+        title: 'تأیید حذف مورد',
+        buildBody: (body) => {
+          const p = document.createElement('p');
+          p.textContent = `آیا از حذف «${label}» اطمینان دارید؟`;
+          body.appendChild(p);
+        },
+        confirmText: 'حذف شود',
+        confirmClass: 'btn-danger',
+        onConfirm: async () => {
+          try {
+            await StorageService.deleteItem(storeName, id);
+            state[storeName] = state[storeName].filter((item) => item.id !== id);
+            showToast('مورد انتخاب‌شده حذف شد.');
+            renderApp();
+          } catch (e) {
+            showToast('خطا در حذف رکورد.', 'danger');
+          }
+        }
+      });
+    }
+
+    function navigateTo(pageId) {
+      state.activePage = pageId;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      renderApp();
+    }
+
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    /* =========================================================================
+       ۱۹. رندر پوسته اصلی برنامه (Header + Sidebar + BottomNav + Content)
+       ========================================================================= */
+    function renderApp() {
+      const root = document.getElementById('appRoot');
+      root.innerHTML = '';
+
+      if (state.loading) {
+        root.innerHTML = `<div class="onboarding-wrap"><div class="card empty-state"><p>در حال بارگذاری پایگاه داده محلی تندرسا...</p></div></div>`;
+        return;
+      }
+
+      if (state.error) {
+        root.innerHTML = `<div class="onboarding-wrap"><div class="alert-box alert-danger"><div>${escapeHTML(state.error)}</div></div></div>`;
+        return;
+      }
+
+      // اگر هنوز پروفایل اولیه تکمیل نشده، صفحه خوشامدگویی را نشان بده
+      if (!state.profile) {
+        renderOnboarding(root);
+        return;
+      }
+
+      const shell = document.createElement('div');
+      shell.className = 'app-shell';
+
+      const navItems = [
+        { id: 'dashboard', label: 'خانه', icon: ICONS.home, inBottom: true },
+        { id: 'food', label: 'ثبت غذا', icon: ICONS.food, inBottom: true },
+        { id: 'water', label: 'آب', icon: ICONS.water, inBottom: true },
+        { id: 'reports', label: 'گزارش‌ها', icon: ICONS.reports, inBottom: true },
+        { id: 'suggestions', label: 'پیشنهاد غذایی', icon: ICONS.sparkle, inBottom: false },
+        { id: 'history', label: 'تاریخچه', icon: ICONS.calendar, inBottom: false },
+        { id: 'profile', label: 'پروفایل و تنظیمات', shortLabel: 'پروفایل', icon: ICONS.profile, inBottom: true }
+      ];
+
+      // منوی کناری دسکتاپ
+      const sidebar = document.createElement('aside');
+      sidebar.className = 'sidebar';
+      sidebar.innerHTML = `
+        <div class="brand-box">
+          ${ICONS.logo}
+          <div class="brand-title-group">
+            <div class="brand-name">تندرسا <span class="brand-en">TANDERSA</span></div>
+            <div class="brand-sub">مدیریت تغذیه و سبک زندگی</div>
+          </div>
+        </div>
+        <nav class="side-nav-list" aria-label="منوی اصلی دسکتاپ"></nav>
+      `;
+      const sideNavList = sidebar.querySelector('.side-nav-list');
+      navItems.forEach((item) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `nav-item ${state.activePage === item.id ? 'active' : ''}`;
+        btn.innerHTML = `${item.icon}<span>${item.label}</span>`;
+        btn.onclick = () => navigateTo(item.id);
+        sideNavList.appendChild(btn);
+      });
+      shell.appendChild(sidebar);
+
+      // بخش اصلی
+      const mainWrapper = document.createElement('div');
+      mainWrapper.className = 'main-wrapper';
+
+      const topbar = document.createElement('header');
+      topbar.className = 'topbar';
+      topbar.innerHTML = `
+        <div class="brand-box">
+          ${ICONS.logo}
+          <div class="brand-title-group">
+            <div class="brand-name">تندرسا <span class="brand-en">TANDERSA</span></div>
+            <div class="brand-sub">هر روز، یک قدم به سوی زندگی سالم‌تر</div>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" id="topSugBtn" class="icon-btn" aria-label="پیشنهادهای غذایی هوشمند" title="پیشنهادهای غذایی">${ICONS.sparkle}</button>
+          <button type="button" id="topHistBtn" class="icon-btn" aria-label="تقویم تاریخچه" title="تقویم تاریخچه">${ICONS.calendar}</button>
+          <button type="button" id="topThemeBtn" class="icon-btn" aria-label="تغییر تم روشن و تاریک" title="تغییر تم">
+            ${state.settings.theme === 'dark' ? ICONS.sun : ICONS.moon}
+          </button>
+        </div>
+      `;
+      mainWrapper.appendChild(topbar);
+
+      topbar.querySelector('#topSugBtn').onclick = () => navigateTo('suggestions');
+      topbar.querySelector('#topHistBtn').onclick = () => navigateTo('history');
+      topbar.querySelector('#topThemeBtn').onclick = () => {
+        const next = state.settings.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        renderApp();
+      };
+
+      const contentContainer = document.createElement('main');
+      contentContainer.className = 'container';
+
+      switch (state.activePage) {
+        case 'food':
+          renderFoodPage(contentContainer);
+          break;
+        case 'water':
+          renderWaterPage(contentContainer);
+          break;
+        case 'reports':
+          renderReportsPage(contentContainer);
+          break;
+        case 'suggestions':
+          renderSuggestionsPage(contentContainer);
+          break;
+        case 'history':
+          renderHistoryPage(contentContainer);
+          break;
+        case 'profile':
+          renderProfileAndSettingsPage(contentContainer);
+          break;
+        case 'dashboard':
+        default:
+          renderDashboard(contentContainer);
+          break;
+      }
+
+      mainWrapper.appendChild(contentContainer);
+      shell.appendChild(mainWrapper);
+
+      // منوی پایین صفحه موبایل (دقیقاً ۵ گزینه اصلی: خانه، ثبت غذا، آب، گزارش‌ها، پروفایل)
+      const bottomNav = document.createElement('nav');
+      bottomNav.className = 'bottom-nav';
+      bottomNav.setAttribute('aria-label', 'منوی پایین موبایل');
+
+      navItems.filter((i) => i.inBottom).forEach((item) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `bottom-nav-btn ${state.activePage === item.id ? 'active' : ''}`;
+        btn.innerHTML = `${item.icon}<span>${item.shortLabel || item.label}</span>`;
+        btn.onclick = () => navigateTo(item.id);
+        bottomNav.appendChild(btn);
+      });
+
+      shell.appendChild(bottomNav);
+      root.appendChild(shell);
+    }
+
+    /* =========================================================================
+       ۲۰. راه‌اندازی اولیه اپلیکیشن و بازیابی داده‌ها از IndexedDB
+       ========================================================================= */
+    async function loadAllDataFromDB() {
+      const [profile, foodLogs, waterLogs, activityLogs, weightLogs] = await Promise.all([
+        StorageService.getProfile(),
+        StorageService.getAll('foodLogs'),
+        StorageService.getAll('waterLogs'),
+        StorageService.getAll('activityLogs'),
+        StorageService.getAll('weightLogs')
+      ]);
+      state.profile = profile || null;
+      state.foodLogs = foodLogs || [];
+      state.waterLogs = waterLogs || [];
+      state.activityLogs = activityLogs || [];
+      state.weightLogs = weightLogs || [];
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await StorageService.init();
+        await loadAllDataFromDB();
+        setupWaterReminderTimer();
+        state.loading = false;
+      } catch (err) {
+        state.loading = false;
+        state.error = err.message || 'خطا در راه‌اندازی حافظه محلی برنامه.';
+      }
+      renderApp();
+    });
+  </script>
+  
+<!-- TANDERSA SERVICE WORKER REGISTRATION -->
+
+<script>
+  if ('serviceWorker' in navigator) {
+
+    window.addEventListener('load', async () => {
+
+      try {
+
+        const registration =
+          await navigator.serviceWorker.register(
+            './service-worker.js',
+            {
+              scope: './'
+            }
+          );
+
+        console.log(
+          'TANDERSA: PWA successfully registered.',
+          registration.scope
+        );
+
+      } catch (error) {
+
+        console.error(
+          'TANDERSA: Service Worker registration failed:',
+          error
+        );
+
+      }
+
+    });
+
+  }
+</script>
+
+  
+  
+  
+  
+</body>
+</html>

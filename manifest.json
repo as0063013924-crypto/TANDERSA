@@ -1,0 +1,30 @@
+
+{
+  "id": "./",
+  "name": "تندرسا | TANDERSA",
+  "short_name": "تندرسا",
+  "description": "مدیریت هوشمند تغذیه و سبک زندگی",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFF9F6",
+  "theme_color": "#701C3C",
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
